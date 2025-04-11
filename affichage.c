@@ -19,7 +19,7 @@
     int position;  // position horizontale du perso
 } Personnage;*/
 
-// Fonction pour dessiner une barre (vie ou tour)
+// Fonction pour dessiner une barre (PV ou tour)
 void dessiner_barre(int valeur, int max, char symbole) {
     for (int i = 0; i < max; i++) {
         if (i < valeur)
@@ -51,10 +51,10 @@ void afficher_ligne(int ligne, Personnage persos[], int nb_persos) {
                 j += strlen(persos[p].effet) + 1;
                 affiché = 1;
             }
-            // Barre de vie
+            // Barre de PV
             else if (ligne == 4 && j == pos) {
                 printf("[");
-                dessiner_barre(persos[p].vie, MAX_BARRE, '#');
+                dessiner_barre(persos[p].PV, MAX_BARRE, '#');
                 printf("]");
                 j += MAX_BARRE + 1;
                 affiché = 1;
