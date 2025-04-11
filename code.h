@@ -17,3 +17,6 @@ typedef struct {
     int position;  // position horizontale du perso
 } Personnage;
 
+void dessiner_barre(int valeur, int max, char symbole);
+void afficher_ligne(int ligne, Personnage persos[], int nb_persos);
+void afficher_plateau(Personnage persos[], int nb_persos);
