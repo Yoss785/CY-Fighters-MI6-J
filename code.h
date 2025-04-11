@@ -11,3 +11,6 @@ typedef struct {
     int VIT;
     int position;  // position horizontale du perso
 } Personnage;
+#define L 90
+#define H 6
+#define MAX_BARRE 14
