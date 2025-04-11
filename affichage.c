@@ -1,6 +1,5 @@
 
-#include <stdio.h>
-#include <string.h>
+#include "code.h"
 
 /*#define L 90
 #define H 6
