@@ -94,7 +94,7 @@ void afficher_plateau(Personnage persos[], int nb_persos) {
     printf("\n");
 }
 
-// Main
+/* Main
 int main() {
     Personnage persos[3] = {
         {"LUFFY", "o", 1, 10, 10, 5},
@@ -105,3 +105,4 @@ int main() {
     afficher_plateau(persos, 3);
     return 0;
 }
+*/
