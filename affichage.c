@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#define L 90
+/*#define L 90
 #define H 6
-#define MAX_BARRE 14
+#define MAX_BARRE 14*/
 
 // Structure pour stocker un personnage
-typedef struct {
+/*typedef struct {
     char *nom;
     char *effet;
     int cible;
@@ -18,7 +18,7 @@ typedef struct {
     int AGL;
     int VIT;
     int position;  // position horizontale du perso
-} Personnage;
+} Personnage;*/
 
 // Fonction pour dessiner une barre (vie ou tour)
 void dessiner_barre(int valeur, int max, char symbole) {
