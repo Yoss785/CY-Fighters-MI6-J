@@ -6,7 +6,6 @@ int main() {
         {"ZORO",  "z", 2, 14, 14, 10, 10, 10 7, 38},
         {"SANJI", "s", 3, 4, 14, 10, 10, 10, 12, 68}
     };
-    printf("hello");
     afficher_plateau(persos, 3);
     return 0;
 }
