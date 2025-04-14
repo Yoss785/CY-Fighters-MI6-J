@@ -42,7 +42,7 @@ void appliquer_technique(Personnage *attaquant, Personnage *cible) {
             cible->AGL = cible->AGL * technique.agl_m; // Applique le multiplicateur d'agilité
         }
         // Appliquer les dégâts
-        cible->PV -= technique.degats;  // Déduit les dégâts de l'ennemi
+        cible->PV -= technique.degats; 
     }
 }
 
