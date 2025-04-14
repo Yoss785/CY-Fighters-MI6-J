@@ -31,6 +31,22 @@
     TS technique;
 } Personnage;*/
 
+/* 
+// Fonction pour appliquer une technique spéciale à un ennemi (comme celle de Kizaru)
+void appliquer_technique(Personnage *attaquant, Personnage *cible) {
+    TS technique = attaquant->technique; 
+
+    if (technique.cible == 1) { // Si la technique cible l'ennemi
+        // Si la technique est un multiplicateur d'agilité
+        if (technique.agl_m != 1.0) {
+            cible->AGL = cible->AGL * technique.agl_m; // Applique le multiplicateur d'agilité
+        }
+        // Appliquer les dégâts
+        cible->PV -= technique.degats;  // Déduit les dégâts de l'ennemi
+    }
+}
+
+*/
 // Fonction pour dessiner une barre (PV ou tour)
 void dessiner_barre(int valeur, int max, char symbole) {
     for (int i = 0; i < max; i++) {
