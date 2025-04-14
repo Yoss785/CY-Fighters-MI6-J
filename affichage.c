@@ -5,6 +5,15 @@
 #define H 6
 #define MAX_BARRE 14*/
 
+typedef struct{
+    char* nom;
+    int valeur;
+    char* description;
+    int cooldown:
+    int duree; 
+]TS;// Technique spécial
+
+
 // Structure pour stocker un personnage
 /*typedef struct {
     char *nom;
@@ -17,6 +26,7 @@
     int AGL;
     int VIT;
     int position;  // position horizontale du perso
+    TS technique;
 } Personnage;*/
 
 // Fonction pour dessiner une barre (PV ou tour)
