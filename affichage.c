@@ -7,10 +7,12 @@
 
 /*typedef struct{
     char* nom;
-    int valeur;
     char* description;
     int cooldown:
-    int duree; 
+    int duree;
+    int degats;
+    float agl_m; //multiplicateur d'agilité (pour Kizaru), implémenter si besoin pour l'atk ou la def pour d'autres personnages
+    int cible; // 0 = soi-même, 1 = ennemi
 ]TS;// Technique spécial
 */
 
@@ -106,9 +108,9 @@ void afficher_plateau(Personnage persos[], int nb_persos) {
 /* Main
 int main() {
     Personnage persos[3] = {
-        {"LUFFY", "l", 1, 10, 14, 10, 10, 10, 10, 5,{"Gear Second", 20, "Attaque x2 pendant 2 tours", 3, 2}},
-        {"ZORO",  "z", 2, 14, 14, 10, 10, 10 7, 38},
-        {"SANJI", "s", 3, 4, 14, 10, 10, 10, 12, 68}
+        {"AKAINU", "a", 1, 10, 14, 10, 10, 10, 10, 5,{"Grande eruption", "L'adversaire perd 4% de PV  pendant 2 tours + 15PV ", 3, 2, 15, 1, 1}},
+        {"AOKIJI",  "a", 2, 14, 14, 10, 10, 10 7, 38,{"Mur de glace", "L'avdersaire perd 10 PV et ne peut pas attaqué au prochain tour", 4, 1, 10, 1, 1},
+        {"KIZARU", "k", 3, 4, 14, 10, 10, 10, 12, 68, {"Illumination", "L'agilité de l'ennemi est multipliée par 0.6 et subit 10 dégâts", 3, 2, 10, 0.6, 1}" }
     };
 
     afficher_plateau(persos, 3);
