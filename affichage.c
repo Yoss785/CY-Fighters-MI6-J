@@ -5,14 +5,14 @@
 #define H 6
 #define MAX_BARRE 14*/
 
-typedef struct{
+/*typedef struct{
     char* nom;
     int valeur;
     char* description;
     int cooldown:
     int duree; 
 ]TS;// Technique spécial
-
+*/
 
 // Structure pour stocker un personnage
 /*typedef struct {
