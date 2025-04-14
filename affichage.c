@@ -13,7 +13,7 @@
     int degats;
     float agl_m; //multiplicateur d'agilité (pour Kizaru), implémenter si besoin pour l'atk ou la def pour d'autres personnages
     int cible; // 0 = soi-même, 1 = ennemi
-]TS;// Technique spécial
+}TS;// Technique spécial
 */
 
 // Structure pour stocker un personnage
