@@ -2,7 +2,8 @@
 #include "code.h"
 
 /*#define L 90
-#define H 6
+#define H 15
+#define h 6
 #define MAX_BARRE 14*/
 
 /*typedef struct{
@@ -60,62 +61,116 @@ void dessiner_barre(int valeur, int max, char symbole) {
 // Fonction pour afficher une ligne du plateau
 void afficher_ligne(int ligne, Personnage persos[], int nb_persos) {
     printf("|");
-    for (int j = 0; j < L; j++) {
-        int affiché = 0;
+    int j = 0;
+    while (j < L) {
+        int affiche = 0;
 
-        // On parcourt chaque perso
-        for (int p = 0; p < nb_persos; p++) {
+       for (int p = 0; p < nb_persos; p++) {
             int pos = persos[p].position;
-
-            // Ligne des noms
-            if (ligne == 2 && j == pos) {
-                printf("%s %d", persos[p].nom, persos[p].cible);
-                j += strlen(persos[p].nom) + 1;
-                affiché = 1;
-            }
-            // Ligne des effets
-            else if (ligne == 3 && j == pos) {
-                printf("{%s}", persos[p].effet);
-                j += strlen(persos[p].effet) + 1;
-                affiché = 1;
-            }
-            // Barre de PV
-            else if (ligne == 4 && j == pos) {
-                printf("[");
-                dessiner_barre(persos[p].PV, MAX_BARRE, '#');
-                printf("]");
-                j += MAX_BARRE + 1;
-                affiché = 1;
-            }
-            // Barre de tour
-            else if (ligne == 5 && j == pos) {
-                printf("[");
-                dessiner_barre(persos[p].tour, MAX_BARRE, '>');
-                printf("]");
-                j += MAX_BARRE + 1;
-                affiché = 1;
+            //Ligne de nom des personnages
+            if (j == pos) {
+                if (ligne == 2) {
+                    int nb_caracteres = printf("%s %d", persos[p].nom, persos[p].cible);
+                    j += nb_caracteres;
+                    affiche = 1;
+                    break;
+                    //Ligne des effets
+                } else if (ligne == 3) {
+                    int nb_caracteres = printf("{%s}", persos[p].effet);
+                    j += nb_caracteres;
+                    affiche = 1;
+                    break;
+                    //Ligne de la barre de vie
+                } else if (ligne == 4) {
+                    printf("[");
+                    dessiner_barre(persos[p].PV, MAX_BARRE, '#');
+                    printf("]");
+                    j += MAX_BARRE + 2;
+                    affiche = 1;
+                    break;
+                    //Ligne de la barre de tour
+                } else if (ligne == 5) {
+                    printf("[");
+                    dessiner_barre(persos[p].VIT, MAX_BARRE, '>');
+                    printf("]");
+                    j += MAX_BARRE + 2;
+                    affiche = 1;
+                    break;
+                }
             }
         }
+        //Lignes de la description de la technique du personnage 
+        if (ligne >= 7 && ligne <= 14 && j == 0) {
+            TS tech = persos[0].technique;
+            int nb_caracteres = 0;
 
-        if (!affiché)
+            switch (ligne) {
+                case 7:
+                    nb_caracteres = printf("Technique du perso 1: %s", tech.nom);
+                    break;
+                case 8:
+                    nb_caracteres = printf("Description: %s", tech.description);
+                    break;
+                case 9:
+                    nb_caracteres = printf("Cooldown: %d", tech.cooldown);
+                    break;
+                case 10:
+                    nb_caracteres = printf("Durée: %d", tech.duree);
+                    break;
+                case 11:
+                    nb_caracteres = printf("Dégâts: %d", tech.degats);
+                    break;
+                case 12:
+                    nb_caracteres = printf("Cible: %s", (tech.cible == 1) ? "Ennemi" : "Soi-même");
+                    break;
+                case 13:
+                    nb_caracteres = printf("Multiplicateur AGL: %.2f", tech.agl_m);
+                    break;
+            }
+
+            // Compléter avec des espaces
+            while (j + nb_caracteres < L) {
+                printf(" ");
+                nb_caracteres++;
+            }
+
+            j = L;
+            affiche = 1;
+        }
+
+        if (!affiche) {
             printf(" ");
+            j++;
+        }
     }
+
     printf("|\n");
 }
 
-// Fonction principale d'affichage du plateau
-void afficher_plateau(Personnage persos[], int nb_persos) {
-    // Haut du cadre
+// Fonctions d'affichage du plateau (petit et grand)
+void afficher_plateau_petit(Personnage persos[], int nb_persos) {
     printf(" ");
     for (int i = 0; i < L; i++) printf("_");
     printf("\n");
 
-    // Lignes du plateau
+    for (int i = 1; i <= h; i++) {
+        afficher_ligne(i, persos, nb_persos);
+    }
+
+    printf(" ");
+    for (int i = 0; i < L; i++) printf("_");
+    printf("\n");
+}
+
+void afficher_plateau_grand(Personnage persos[], int nb_persos) {
+    printf(" ");
+    for (int i = 0; i < L; i++) printf("_");
+    printf("\n");
+
     for (int i = 1; i <= H; i++) {
         afficher_ligne(i, persos, nb_persos);
     }
 
-    // Bas du cadre
     printf(" ");
     for (int i = 0; i < L; i++) printf("_");
     printf("\n");
@@ -124,12 +179,13 @@ void afficher_plateau(Personnage persos[], int nb_persos) {
 /* Main
 int main() {
     Personnage persos[3] = {
-        {"AKAINU", "a", 1, 10, 14, 10, 10, 10, 10, 5,{"Grande eruption", "L'adversaire perd 4% de PV  pendant 2 tours + 15PV ", 3, 2, 15, 1, 1}},
-        {"AOKIJI",  "a", 2, 14, 14, 10, 10, 10 7, 38,{"Mur de glace", "L'avdersaire perd 10 PV et ne peut pas attaqué au prochain tour", 4, 1, 10, 1, 1},
-        {"KIZARU", "k", 3, 4, 14, 10, 10, 10, 12, 68, {"Illumination", "L'agilité de l'ennemi est multipliée par 0.6 et subit 10 dégâts", 3, 2, 10, 0.6, 1}" }
-    };
+        {"AKAINU", "a", 1, 10, 14, 10, 10, 10, 10, 5, {"Grande eruption", "L'adversaire perd 4% de PV pendant 2 tours + 15PV", 3, 2, 15, 1.0f, 1}},
+        {"AOKIJI",  "a", 2, 14, 14, 10, 10, 10 ,7, 38,{"Mur de glace", "L'adversaire perd 10 PV et ne peut pas attaquer au prochain tour", 4, 1, 10, 1.0f, 1}},
+        {"KIZARU", "k", 3, 4, 14, 10, 10, 10, 12, 68,{"Illumination", "L'agilité de l'ennemi est multipliée par 0.6 et subit 10 dégâts", 3, 2, 10, 0.6f, 1}}};
 
-    afficher_plateau(persos, 3);
+    afficher_plateau_petit(persos, 3);
+    afficher_plateau_grand(persos, 3);
+
     return 0;
 }
 */
