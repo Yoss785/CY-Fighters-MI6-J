@@ -14,6 +14,8 @@ typedef struct {
     int cooldown_actuel;              // pour savoir quand elle sera dispo
 } TechniqueSpeciale;
 
+//L'idee c'est de juste creer une fonction qui à partir des information de la technique permette directement d'appliquer cette dernière au lieu de créer une fonction pour chaque technique 
+
 // Combattant (personnage)
 typedef struct {
     char nom[MAX_NOM];
