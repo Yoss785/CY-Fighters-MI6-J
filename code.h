@@ -3,6 +3,8 @@
 #define L 90
 #define H 6
 #define MAX_BARRE 14
+#define NBPERSO 2 //a changer a la fin
+#define TAILLE_EQUIPE 3//a changer potentiellement
 // Structure pour stocker un personnage
 typedef struct {
     char *nom;
