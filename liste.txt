@@ -1,0 +1,17 @@
+Guerrier 67 43 21 56 5
+Voleur 23 45 12 43 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// il faut mettre NOM ATTAQUE DEFENSE AGILITE VITESSE
