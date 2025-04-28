@@ -1,0 +1,44 @@
+AKAINU
+120
+15
+12
+10
+10
+Grande eruption
+Inflige 15 degats et brule l'adversaire pendant 3 tours 
+3 
+0
+AOKIJI
+100
+20
+10
+12
+13
+Mur de glace
+Inflige 20 degats à l'adversaire et le gèle à son prochain tour
+4 
+0
+KIZARU
+90
+10
+8
+18
+17
+Illumination divine
+Inflige 10 degats à l'adversaire et l'aveugle(il fait baisser son agilité) 
+2
+0
+
+
+/* 
+Nom
+Pv max
+atk
+def
+agi
+vit
+Nom de la techniquqe
+sa description (le plus court possible)
+tours de rechargement
+cooldown actuel
+*/
