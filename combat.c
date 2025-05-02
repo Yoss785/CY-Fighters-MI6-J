@@ -1,9 +1,9 @@
+#include <stdio.h>
+#include <string.h>
+#include "techniques.h"
+
 #include "code.h"
 #include "code.h"
-
-
-
-
 
 void phase(Combattant* equipe1,Combattant* equipe2){
 for(int i=0;i<NBPERSO;i++){
