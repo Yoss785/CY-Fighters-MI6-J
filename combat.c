@@ -1,4 +1,5 @@
 #include "code.h"
+#include "code.h"
 
 
 
@@ -49,12 +50,18 @@ void attaque(Combattant* perso,Combattant* equipe){
         degats=degats*3;// a changer pour equilibrage
     }// on determine si il y a un coup critique
     printf("%s recoit %d degats\n",(equipe+choix-1)->nom,degats);
-    (equipe+choix-1)->PV-=degats;
-    if((equipe+choix-1)->PV<=0){
+    (equipe+choix-1)->pv-=degats;
+    if((equipe+choix-1)->pv<=0){
         printf("%s succombe\n",(equipe+choix-1)->nom);
         (equipe+choix-1)->est_KO=0;
     }
 }
+
+
+
+
+
+
 
 void appliquer_technique(Combattant* utilisateur, Combattant* cible, TechniqueSpeciale* technique) {
     if (technique->cooldown_actuel > 0) {
