@@ -3,7 +3,7 @@
 
 #define MAX_NOM 50
 #define MAX_DESC 200
-#define MAX_TECHNIQUES 2
+#define MAX_TECHNIQUES 2 //à retirer
 #define TAILLE_EQUIPE 1 //Pour faciliter mes tests sinon c'est 3 
 #define L 90 
 #define H 15
