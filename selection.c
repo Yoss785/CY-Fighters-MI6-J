@@ -17,8 +17,43 @@ void selection(Combattant* equipe1,Combattant* equipe2,FILE* fichier) {
 	//on part du principe que les deux equipes ont meme nb de persos
 }   //chaque joueur choisi un Combattant qui sera ensuite construit par la fonction construction_perso
 
+//C'est comme ça avec strcmp
+/*void selection(Combattant* equipe1, Combattant* equipe2, FILE* fichier) {
+    for (int i = 0; i < TAILLE_EQUIPE; i++) {
 
+        // === JOUEUR 1 ===
+        int j;
+        do {
+            rewind(fichier);
+            printf("\nJoueur 1 - Sélection du combattant %d\n", i + 1);
+            construction_perso_auto(&equipe1[i], fichier);
 
+            for (j = 0; j < i; j++) {
+                if (strcmp(equipe1[i].nom, equipe1[j].nom) == 0) {
+                    printf("Personnage déjà pris, choisissez un autre.\n");
+                    break;
+                }
+            }
+        } while (j < i);
+        equipe1[i].position = i * 25;
+
+        // === JOUEUR 2 ===
+        do {
+            rewind(fichier);
+            printf("\nJoueur 2 - Sélection du combattant %d\n", i + 1);
+            construction_perso_auto(&equipe2[i], fichier);
+
+            for (j = 0; j < i; j++) {
+                if (strcmp(equipe2[i].nom, equipe2[j].nom) == 0) {
+                    printf("Personnage déjà pris, choisissez un autre.\n");
+                    break;
+                }
+            }
+        } while (j < i);
+        equipe2[i].position = i * 25;
+    }
+}
+*/
 // C est la meme fonction mais ca regarde si il y a un perso du meme nom dans l equipe
 /*void selection(Combattant* equipe1, Combattant* equipe2, FILE* fichier) {
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
