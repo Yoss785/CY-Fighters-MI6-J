@@ -16,6 +16,49 @@ void selection(Combattant* equipe1,Combattant* equipe2,FILE* fichier) {
 	}
 	//on part du principe que les deux equipes ont meme nb de persos
 }   //chaque joueur choisi un Combattant qui sera ensuite construit par la fonction construction_perso
+
+
+
+// C est la meme fonction mais ca regarde si il y a un perso du meme nom dans l equipe
+/*void selection(Combattant* equipe1, Combattant* equipe2, FILE* fichier) {
+    for (int i = 0; i < TAILLE_EQUIPE; i++) {
+        rewind(fichier);
+        printf("\nJoueur 1 - Sélection du combattant %d\n", i + 1);
+        construction_perso_auto(&equipe1[i], fichier);
+        if(i==2){
+            if((equipe1+i)->nom==(equipe1+i-1)->nom){//changer perso en equipe1
+                printf("personnage deja pris\n");
+                construction_perso_auto(&equipe1[i], fichier);
+            }
+        }
+        if(i==3){
+            if((equipe1+i)->nom==(equipe1+i-1)->nom||(equipe1+i)->nom==(equipe1+i-2)->nom){
+                printf("personnage deja pris\n");
+                construction_perso_auto(&equipe1[i], fichier);
+            }
+        }
+        equipe1[i].position = i * 25;
+        rewind(fichier);
+        printf("\nJoueur 2 - Sélection du combattant %d\n", i + 1);
+        construction_perso_auto(&equipe2[i], fichier);
+          if(i==2){
+            if((equipe2+i)->nom==(equipe2+i-1)->nom){//changer perso en equipe1
+                printf("personnage deja pris\n");
+                construction_perso_auto(&equipe2[i], fichier);
+            }
+        }
+        if(i==3){
+            if((equipe2+i)->nom==(equipe2+i-1)->nom||(equipe2+i)->nom==(equipe2+i-2)->nom){
+                printf("personnage deja pris\n");
+                construction_perso_auto(&equipe2[i], fichier);
+            }
+        }
+        equipe2[i].position = i * 25;
+    }
+}*/
+
+
+
 void afficher_stats(Combattant perso) {
 	printf("Nom du combattant : %s\n",perso.nom);
 	printf("PVmax : %d\n",perso.PVmax);
