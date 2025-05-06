@@ -13,3 +13,9 @@ int equipe_vivante(Combattant* equipe){
         return 1;
     }
 }
+void flush(){
+    char lettre='a';
+    while(lettre=!'\n'){
+        scanf("%c",&lettre);
+    }
+}
