@@ -1,13 +1,14 @@
-AKAINU
-120
-15
-12
-10
-10
-Grande eruption
-Inflige 15 degats et brule l'adversaire pendant 3 tours 
-3 
+AKAINU 
+120 
+15 
+12 
+10 
+10 
+Grande eruption 
+Inflige des degats et brule l'adversaire pendant 3 tours 
+3
 0
+-
 AOKIJI
 100
 20
@@ -15,9 +16,10 @@ AOKIJI
 12
 13
 Mur de glace
-Inflige 20 degats à l'adversaire et le gèle à son prochain tour
+Inflige des degats à l'adversaire et le gèle à son prochain tour
 4 
 0
+-
 KIZARU
 90
 10
@@ -25,9 +27,67 @@ KIZARU
 18
 17
 Illumination divine
-Inflige 10 degats à l'adversaire et l'aveugle(il fait baisser son agilité) 
+Inflige des degats à l'adversaire et l'aveugle(baisse son agilité) 
 2
 0
+-
+GOKU
+95
+17
+12
+15
+14
+Kamehameha
+Inflige des degats à l'adversaire et augmente son attaque
+3
+0
+-
+VEGETA
+105
+14
+18
+13
+13
+Final flash
+Inflige des degats à l'adversaire et augmente sa défense
+3
+0
+-
+BROLY
+100
+20
+22
+6
+9
+Blaster meteor
+Inflige des degats aux adversaires
+2
+0
+-
+KRILLIN
+60
+10
+20
+25
+Senzu
+Soigne un allie
+2
+0
+-
+JOSUKE
+100
+10
+20
+60
+Crazy Diamond
+Soigne entierement un allie
+4
+0
+-
+
+
+
+
 
 
 /* 
@@ -38,7 +98,7 @@ def
 agi
 vit
 Nom de la techniquqe
-sa description (le plus court possible)
+sa description 
 tours de rechargement
 cooldown actuel
 */
