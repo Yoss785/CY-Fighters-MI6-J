@@ -3,10 +3,13 @@
 
 #include "code.h"
 
-void dessiner_barre(int valeur, int max, char symbole);
-void afficher_ligne(int ligne, Combattant persos[], int nb_persos,int est_grand_plateau);
-void afficher_plateau_petit(Combattant persos[], int nb_persos);
-void afficher_plateau_grand(Combattant persos[], int nb_persos);
+void effacer_ecran();
+void afficher_indicateur_tour(int action, int max_action);
+void afficher_effets_speciaux(Combattant *combattant);
+void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taille, int numero_equipe, int est_active);
+void afficher_techniques_speciales(Combattant *combattant,int numero_equipe);
 void afficher_plateau(Combattant equipe1[], Combattant equipe2[]);
+int determiner_equipe_active(Combattant equipe1[], Combattant equipe2[]);
+Combattant* trouver_personnage_actif(Combattant equipe[], int taille_equipe);
 
 #endif
