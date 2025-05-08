@@ -7,8 +7,6 @@ void flush(void) {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-#include <stdio.h>
-
 int getInt() {
     int val = 0;
     char c;
