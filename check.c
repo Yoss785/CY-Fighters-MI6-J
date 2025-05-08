@@ -6,35 +6,31 @@ void flush(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
-
-int getInt() {
+int getInt(int min, int max) {
     int val = 0;
     char c;
-    int Valide = 1;
+    int valide = 0;
 
-    while (1) {
-        Valide = 1;  // On suppose au départ que l'entrée est valide
-        printf("Entrez un entier : ");
-        
-        // Lire chaque caractère jusqu'à ce qu'on atteigne '\n' ou EOF
-        while ((c = getchar()) != '\n' && c != EOF) {
-            // Vérifier si le caractère est un chiffre
-            if (c < '0' || c > '9') {
-                Valide = 0;  // Entrée invalide si le caractère n'est pas un chiffre
-                break;
+    while (!valide) {
+        c = getchar();  // Lire un caractère
+        if (c == '\n') continue;  // Ignorer les retours à la ligne
+
+        // Vérifier si c'est un chiffre
+        if (c >= '0' && c <= '9') {
+            val = val * 10 + (c - '0');  // Construire l'entier
+        } else if (c == '\n') {
+            // Vérification si la valeur est dans l'intervalle valide
+            if (val >= min && val <= max) {
+                valide = 1;  // Saisie valide
+            } else {
+                printf("Veuillez entrer un nombre entre %d et %d.\n", min, max);
+                val = 0;  // Réinitialiser la valeur si elle est invalide
+                printf("Essayer encore : ");
             }
-
-            // Construire la valeur entière
-            val = val * 10 + (c - '0');
-        }
-
-        if (Valide) {
-            return val;  // Si l'entrée est valide, retourner la valeur
         } else {
-            // Si entrée invalide, afficher un message d'erreur et vider le tampon
-            printf("Entrée invalide. Veuillez entrer un entier valide.\n");
-            // Vider le tampon pour nettoyer l'entrée
-            while ((c = getchar()) != '\n' && c != EOF);
+            printf("Entrée invalide. Essayez de nouveau.\n");
+            val = 0;  // Réinitialiser si l'entrée n'est pas un chiffre
         }
     }
+    return val;
 }
