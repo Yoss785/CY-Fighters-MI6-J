@@ -2,127 +2,144 @@
 #include <string.h>
 #include "affichage.h"
 #include "code.h"
+#include "combat.h"
+#include <stdlib.h>
 
-// Définition des lignes d'affichage
-#define LIGNE_NOM 2
-#define LIGNE_PV 4
-#define LIGNE_BARRE 5
-#define LIGNE_TECH 9
-#define LIGNE_DESC 10
-#define LIGNE_CD 11
+void effacer_ecran() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
 
-void dessiner_barre(int valeur, int max, char symbole) {
-    for (int i = 0; i < max; i++) {
-        putchar((i < valeur) ? symbole : ' ');
+void afficher_indicateur_tour(int action, int max_action) {
+    int barre_pleine = (action * MAX_BARRE) / max_action;
+
+    printf("[");
+    for (int i = 0; i < MAX_BARRE; i++) {
+        if (i < barre_pleine) {
+            printf(">");
+        } else {
+            printf(" ");
+        }
+    }
+    printf("]");
+}
+
+void afficher_effets_speciaux(Combattant *combattant) {
+    if (combattant->est_KO) {
+        printf("(KO)");
+    } else {
+        printf("    ");
     }
 }
 
-void afficher_ligne(int ligne, Combattant persos[], int nb_persos, int est_grand_plateau) {
-    char buffer[L + 1];
-    memset(buffer, ' ', L);
-    buffer[L] = '\0';
+// Fonction pour déterminer une cible par défaut (premier ennemi vivant)
+Combattant* trouver_cible_par_defaut(Combattant equipe[], int taille) {
+    for (int i = 0; i < taille; i++) {
+        if (!equipe[i].est_KO) {
+            return &equipe[i];
+        }
+    }
+    return NULL;
+}
 
-    putchar('|');
+void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taille, int numero_equipe, int est_active) {
+    int hauteur = h;
 
-    int espacement = est_grand_plateau ? 25 : 20;
+    printf("_[EQUIPE %d]", numero_equipe);
+    for (int i = 0; i < L - 12; i++) printf("_");
+    printf("\n");
 
-    for (int i = 0; i < nb_persos; i++) {
-        Combattant* perso = &persos[i];
-        if (perso->est_KO) continue;
+    for (int i = 0; i < taille; i++) {
+        if (equipe[i].est_KO) continue;
 
-        int pos_affichage = i * espacement;
-
-        if (pos_affichage < 0 || pos_affichage >= L - 1) continue;
-
-        if (ligne == LIGNE_NOM) {
-            snprintf(buffer + pos_affichage, L - pos_affichage,
-                     perso->est_actif ? "> %-18s <" : "  %-20s", perso->nom);
-        } else if (ligne == LIGNE_PV) {
-            snprintf(buffer + pos_affichage, L - pos_affichage,
-                     "[%3d/%3d]   ", perso->pv, perso->pv_max);
-        } else if (ligne == LIGNE_BARRE) {
-            int nb = (perso->action * MAX_BARRE) / 100;
-            if (nb > MAX_BARRE) nb = MAX_BARRE;
-
-            char barre[MAX_BARRE + 3];
-            barre[0] = '[';
-            for (int j = 0; j < MAX_BARRE; j++)
-                barre[j + 1] = (j < nb) ? '>' : ' ';
-            barre[MAX_BARRE + 1] = ']';
-            barre[MAX_BARRE + 2] = '\0';
-
-            snprintf(buffer + pos_affichage, L - pos_affichage, "%s", barre);
+        char nom_formate[64];
+        if (equipe[i].est_actif) {
+            snprintf(nom_formate, sizeof(nom_formate), "> %-15s <", equipe[i].nom);
+        } else {
+            snprintf(nom_formate, sizeof(nom_formate), "  %-15s  ", equipe[i].nom);
         }
 
-        if (perso->est_actif && perso->nb_techniques > 0) {
-            if (ligne == LIGNE_TECH) {
-                snprintf(buffer + pos_affichage, L - pos_affichage, "Technique: %-20s", perso->techniques[0].nom);
-            } else if (ligne == LIGNE_DESC) {
-                snprintf(buffer + pos_affichage, L - pos_affichage, "%.*s",
-                         (L - pos_affichage > 70) ? 70 : (L - pos_affichage - 1),
-                         perso->techniques[0].description);
-            } else if (ligne == LIGNE_CD) {
-                snprintf(buffer + pos_affichage, L - pos_affichage,
-                         "CD: %2d | Dispo dans %2d tour(s)",
-                         perso->techniques[0].tours_rechargement,
-                         perso->techniques[0].cooldown_actuel);
-            }
+        printf("| %s |%2d| ", nom_formate, equipe[i].position);
+
+        printf("%3d/%3d ", equipe[i].pv, equipe[i].pv_max);
+        afficher_indicateur_tour(equipe[i].action, 100); // 100 arbitraire
+        printf(" |\n");
+    }
+
+    for (int i = 0; i < hauteur - 2 - taille; i++) {
+        printf("|");
+        for (int j = 0; j < L - 2; j++) printf(" ");
+        printf("|\n");
+    }
+
+    printf("|");
+    for (int i = 0; i < L - 2; i++) printf("_");
+    printf("|\n");
+}
+
+void afficher_techniques_speciales(Combattant *combattant, int numero_equipe) {
+    printf("| > %s (Equipe %d) <\n", combattant->nom, numero_equipe);
+    printf("| TECHNIQUE SPECIALE\n");
+
+    for (int i = 0; i < combattant->nb_techniques; i++) {
+        TechniqueSpeciale *technique = &combattant->techniques[i];
+        printf("| [%d] %s \n", i + 1, technique->nom);
+        printf("|     ↳ %s\n", technique->description);
+        if (technique->cooldown_actuel > 0) {
+            printf("|     ↳ Recharge: %d/%d tours\n",
+                   technique->cooldown_actuel, technique->tours_rechargement);
         }
     }
 
-    printf("%s|\n", buffer);
+    printf("|");
+    for (int i = 0; i < L - 2; i++) printf("_");
+    printf("|\n");
 }
 
-void afficher_plateau_petit(Combattant persos[], int nb_persos) {
-    putchar(' ');
-    for (int i = 0; i < L; i++) putchar('_');
-    putchar('\n');
-
-    for (int l = 1; l <= h; l++)
-        afficher_ligne(l, persos, nb_persos, 0);
-
-    putchar(' ');
-    for (int i = 0; i < L; i++) putchar('_');
-    putchar('\n');
+int determiner_equipe_active(Combattant equipe1[], Combattant equipe2[]) {
+    int max_action1 = 0, max_action2 = 0;
+    for (int i = 0; i < TAILLE_EQUIPE; i++) {
+        if (!equipe1[i].est_KO && equipe1[i].action > max_action1)
+            max_action1 = equipe1[i].action;
+        if (!equipe2[i].est_KO && equipe2[i].action > max_action2)
+            max_action2 = equipe2[i].action;
+    }
+    return (max_action1 >= max_action2) ? 1 : 2;
 }
 
-void afficher_plateau_grand(Combattant persos[], int nb_persos) {
-    putchar(' ');
-    for (int i = 0; i < L; i++) putchar('_');
-    putchar('\n');
-
-    for (int l = 1; l <= H; l++)
-        afficher_ligne(l, persos, nb_persos, 1);
-
-    putchar(' ');
-    for (int i = 0; i < L; i++) putchar('_');
-    putchar('\n');
+Combattant* trouver_personnage_actif(Combattant equipe[], int taille_equipe) {
+    Combattant* actif = NULL;
+    int max_action = -1;
+    for (int i = 0; i < taille_equipe; i++) {
+        if (!equipe[i].est_KO && equipe[i].est_actif && equipe[i].action > max_action) {
+            max_action = equipe[i].action;
+            actif = &equipe[i];
+        }
+    }
+    return actif;
 }
 
 void afficher_plateau(Combattant equipe1[], Combattant equipe2[]) {
-    Combattant* actif = NULL;
-    int equipe1_active = 0;
-
-    for (int i = 0; i < TAILLE_EQUIPE; i++) {
-        if (equipe1[i].est_actif) {
-            actif = &equipe1[i];
-            equipe1_active = 1;
-            break;
-        } else if (equipe2[i].est_actif) {
-            actif = &equipe2[i];
-            break;
-        }
+    effacer_ecran();
+    int equipe_active = determiner_equipe_active(equipe1, equipe2);
+    int numero_equipe_actif = equipe_active;
+    
+    if (equipe_active == 1) {
+        afficher_equipe(equipe1, equipe2, TAILLE_EQUIPE, 1, 1);
+        afficher_equipe(equipe2, equipe1, TAILLE_EQUIPE, 2, 0);
+    } else {
+        afficher_equipe(equipe1, equipe2, TAILLE_EQUIPE, 1, 0);
+        afficher_equipe(equipe2, equipe1, TAILLE_EQUIPE, 2, 1);
     }
 
-    if (equipe1_active) {
-        printf("=== ÉQUIPE 1 (actif) ===\n");
-        afficher_plateau_grand(equipe1, TAILLE_EQUIPE);
-        printf("=== ÉQUIPE 2 ===\n");
-        afficher_plateau_petit(equipe2, TAILLE_EQUIPE);
-    } else {
-        printf("=== ÉQUIPE 2 (actif) ===\n");
-        afficher_plateau_grand(equipe2, TAILLE_EQUIPE);
-        printf("=== ÉQUIPE 1 ===\n");
-        afficher_plateau_petit(equipe1, TAILLE_EQUIPE);
+    Combattant *combattant_actif = (equipe_active == 1) 
+        ? trouver_personnage_actif(equipe1, TAILLE_EQUIPE)
+        : trouver_personnage_actif(equipe2, TAILLE_EQUIPE);
+
+    if (combattant_actif && combattant_actif->nb_techniques > 0) {
+        afficher_techniques_speciales(combattant_actif, numero_equipe_actif);
     }
 }
