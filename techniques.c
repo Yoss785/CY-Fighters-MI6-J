@@ -137,6 +137,14 @@ void grande_eruption(Combattant* utilisateur, Combattant* cible){
     printf("GRANDE ERRUPTION\n");
     int degats=utilisateur->attaque-cible->defense;
     degats*=2;
+    if(utilisateur->buff_attaque>0) {
+		degats*=1.5;
+	}
+	if(cible->buff_defense>0) {
+		degats=degats/1.5;
+	}
+	if (degats < 0) degats = 0;
+    cible->pv-=degats;
     printf("Akainu inflige %d degats a %s\n",degats,cible->nom);
     if(cible->pv<=0) {
 		printf("%s transforme %s en tas de cendre\n",utilisateur->nom,cible->nom);
@@ -150,7 +158,16 @@ void illumination_divine(Combattant* utilisateur, Combattant* cible){
     printf("AMATERASU: ILLUMINATION DIVINE\n");
     int degats=utilisateur->attaque-cible->defense;
     degats*=1.5;
+    if(utilisateur->buff_attaque>0) {
+		degats*=1.5;
+	}
+	if(cible->buff_defense>0) {
+		degats=degats/1.5;
+	}
+	if (degats < 0) degats = 0;
+    cible->pv-=degats;
     printf("Kizaru inflige %d degats a %s\n",degats,cible->nom);
+   
     if(cible->pv<=0) {
 		printf("%s fait exploser %s \n",utilisateur->nom,cible->nom);
 	}
@@ -160,5 +177,4 @@ void senzu(Combattant* utilisateur, Combattant* cible){
     cible->pv+=40;
     cible->brulure=0;
     printf("%s se sent de nouveau en pleine forme\n",cible->nom);
-}
 }
