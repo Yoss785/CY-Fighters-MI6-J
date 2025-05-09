@@ -132,7 +132,14 @@ void tour(Combattant* perso, Combattant* equipe) {
 	}
 
 	if (choix == 1) {
-		attaque(perso, equipe);
+	    int choix = -1, validation = 0;
+	while (choix < 1 || choix > TAILLE_EQUIPE || validation != 1) {
+		printf("Entrez la position du personnage C  attaquer : ");
+		scanf("%d", &choix);
+		validation = cible_valide(&equipe[choix - 1]);
+	}
+
+		attaque(perso, equipe+choix);
 	} else {
 		attaque_speciale(perso, equipe);
 	}
@@ -146,15 +153,9 @@ void tour(Combattant* perso, Combattant* equipe) {
 	}
 }
 
-void attaque(Combattant* perso, Combattant* equipe) {
-	int choix = -1, validation = 0;
-	while (choix < 1 || choix > TAILLE_EQUIPE || validation != 1) {
-		printf("Entrez la position du personnage C  attaquer : ");
-		scanf("%d", &choix);
-		validation = cible_valide(&equipe[choix - 1]);
-	}
+void attaque(Combattant* perso, Combattant* cible) {
 
-	Combattant* cible = &equipe[choix - 1];
+	
 	printf("%s attaque %s\n", perso->nom, cible->nom);
 
 	int degats = perso->attaque - cible->defense;
@@ -189,7 +190,6 @@ void attaque(Combattant* perso, Combattant* equipe) {
 		}
 	}
 }
-
 
 void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
     TechniqueSpeciale* tech = &utilisateur->techniques[0];
