@@ -113,10 +113,19 @@ void mur_de_glace(Combattant* utilisateur, Combattant* cible) {
 }
 
 void blaster_meteor(Combattant* utilisateur, Combattant* cible) {
-	printf("Chargement du KI\n");
-    for(int i=0;i<TAILLE_EQUIPE;i++){
-        if(((cible->equipe)+i)->est_KO==0){
-            attaque(utilisateur,(cible->equipe)+i);
+    printf("Chargement du KI...\n");
+    printf("BLASTER METEOR !\n");
+
+    Combattant* equipe_adverse = cible->equipe;
+
+    for (int i = 0; i < TAILLE_EQUIPE; i++) {
+        if (!equipe_adverse[i].est_KO) {
+            printf("%s subit une pluie de KI !\n", equipe_adverse[i].nom);
+            equipe_adverse[i].pv -= 20;
+            if (equipe_adverse[i].pv <= 0) {
+                equipe_adverse[i].est_KO = 1;
+                printf("%s est éliminé !\n", equipe_adverse[i].nom);
+            }
         }
     }
 }
