@@ -5,7 +5,6 @@
 
 void effacer_ecran();
 void afficher_indicateur_tour(int action, int max_action);
-void afficher_effets_speciaux(Combattant *combattant);
 void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taille, int numero_equipe, int est_active);
 void afficher_techniques_speciales(Combattant *combattant,int numero_equipe);
 void afficher_plateau(Combattant equipe1[], Combattant equipe2[]);
