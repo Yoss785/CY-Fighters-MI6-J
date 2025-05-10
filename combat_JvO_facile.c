@@ -7,28 +7,9 @@
 #include "code.h"
 #include "check.h"
 #include "techniques.h"
+#include "JvO_facile.h"
 
-
-void initialiser_premier_joueur(Combattant* equipe1, Combattant* equipe2) {
-    Combattant* plus_rapide = NULL;
-
-    // Cherche le personnage avec la plus grande vitesse dans les deux équipes
-    for (int i = 0; i < TAILLE_EQUIPE; i++) {
-        if (equipe1[i].est_KO == 0 && (plus_rapide == NULL || equipe1[i].vitesse > plus_rapide->vitesse)) {
-            plus_rapide = &equipe1[i];
-        }
-        if (equipe2[i].est_KO == 0 && (plus_rapide == NULL || equipe2[i].vitesse > plus_rapide->vitesse)) {
-            plus_rapide = &equipe2[i];
-        }
-    }
-
-    // Si un personnage a été trouvé, lui donner une action à 100
-    if (plus_rapide != NULL) {
-        plus_rapide->action = 100;
-    }
-}
-
-void phase(Combattant* equipe1, Combattant* equipe2) {
+void phase_bot(Combattant* equipe1, Combattant* equipe2) {
     // Remplir les barres d'action
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         if (!equipe1[i].est_KO) {
@@ -54,8 +35,6 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
             if (!equipe1[i].est_KO && equipe1[i].action >= 100) {
                 equipe1[i].est_actif = 1;
                 afficher_plateau(equipe1, equipe2);
-
-                // Pause pour visualiser l'affichage
                 printf("\n(Appuyez sur Entrée pour continuer...)\n");
                 while (getchar() != '\n');// Vide le buffer jusqu'à un saut de ligne
 
@@ -73,10 +52,6 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
                 if (!equipe2[i].est_KO && equipe2[i].action >= 100) {
                     equipe2[i].est_actif = 1;
                     afficher_plateau(equipe1, equipe2);
-
-                    printf("\n(Appuyez sur Entrée pour continuer...)\n");
-                    while (getchar() != '\n');// Vide le buffer jusqu'à un saut de ligne
-                    
                     tour_bot(&equipe2[i], equipe1);
                     equipe2[i].action = 0;
                     equipe2[i].est_actif = 0;
@@ -87,24 +62,6 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
         }
 
         if (!action_done) break;
-
-        // Réduction des cooldowns
-        for (int i = 0; i < TAILLE_EQUIPE; i++) {
-            if (!equipe1[i].est_KO) {
-                for (int j = 0; j < equipe1[i].nb_techniques; j++) {
-                    if (equipe1[i].techniques[j].cooldown_actuel > 0) {
-                        equipe1[i].techniques[j].cooldown_actuel--;
-                    }
-                }
-            }
-            if (!equipe2[i].est_KO) {
-                for (int j = 0; j < equipe2[i].nb_techniques; j++) {
-                    if (equipe2[i].techniques[j].cooldown_actuel > 0) {
-                        equipe2[i].techniques[j].cooldown_actuel--;
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -144,10 +101,7 @@ void tour_bot(Combattant* bot, Combattant* equipe_adverse) {
     }
 }
 
-
-
-
-void tour(Combattant* perso, Combattant* equipe) {
+void tour_joueur(Combattant* perso, Combattant* equipe) {
     if (perso->est_KO == 1) return;
     int choix = -1;
     
@@ -175,6 +129,12 @@ void tour(Combattant* perso, Combattant* equipe) {
         if (perso->equipe == equipe) {
             equipe1 = equipe;
             equipe2 = perso->equipe;
+        }
+        // Réduction des cooldowns du perso actif uniquement
+        for (int i = 0; i < perso->nb_techniques; i++) {
+            if (perso->techniques[i].cooldown_actuel > 0) {
+            perso->techniques[i].cooldown_actuel--;
+            }
         }
         afficher_plateau(equipe1, equipe2);
     }
