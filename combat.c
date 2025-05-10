@@ -109,86 +109,103 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
 }
 
 void tour(Combattant* perso, Combattant* equipe) {
+    if (perso->est_KO == 1) return;
+    
+    int choix = -1;
+    
+    while (choix != 1 && choix != 2) {
+        printf("%s - Quelle action voulez-vous effectuer ?\n", perso->nom);
+        printf("1 = Attaquer\n2 = Capacité spéciale (%s%s)\n",
+               perso->techniques[0].nom,
+               perso->techniques[0].cooldown_actuel > 0 ? " - en rechargement" : "");
+        choix = getInt(1,2);
+        if (choix != 1 && choix != 2) {
+            printf("Mauvais choix, recommencez.\n");
+        }
+    }
+
+    if (choix == 1) {
+         int choix = -1, validation = 0;
+    while (choix < 1 || choix > TAILLE_EQUIPE || validation != 1) {
+        printf("Entrez la position du personnage à attaquer : ");
+        choix = getInt(1,TAILLE_EQUIPE);
+        validation = cible_valide(&equipe[choix - 1]);
+    }
+        attaque(perso,&equipe[choix - 1]);
+    } else {
+        attaque_speciale(perso, equipe);
+    }
+    if (perso->equipe == NULL) {
+        printf("Erreur: impossible de déterminer l'équipe du personnage\n");
+    } else {
+        Combattant* equipe1 = perso->equipe;
+        Combattant* equipe2 = equipe;
+        if (perso->equipe == equipe) {
+            equipe1 = equipe;
+            equipe2 = perso->equipe;
+        }
+         if(perso->brulure>0){
+             printf("\n");
+             printf("%s souffre de sa brulure\n",perso->nom);
+        perso->pv-=10;
+        if(perso->pv<0){
+            printf("%s succombe a sa brulure\n",perso->nom);
+            perso->est_KO=1;
+        }
+        printf("il reste %d tours de brulure a %s\n",perso->brulure,perso->nom);
+        perso->brulure-=1;
+    }
     if(perso->buff_attaque>0){
         perso->buff_attaque-=1;
+        printf("\n");
+        printf("il reste %d tours de buff d attaque a %s\n",perso->buff_attaque,perso->nom);
     }
-     if(perso->buff_defense>0){
+    if(perso->buff_defense>0){
         perso->buff_defense-=1;
+        printf("\n");
+        printf("il reste %d tours de buff de defense a %s\n",perso->buff_defense,perso->nom);
     }
-     if(perso->debuff_agilite>0){
+    if(perso->debuff_agilite>0){
         perso->debuff_agilite-=1;
+        printf("\n");
+        printf("il reste %d tours de debuff d agilite a %s\n",perso->debuff_agilite,perso->nom);
     }
-	if (perso->est_KO == 1) return;
-	int choix = -1;
-	while (choix != 1 && choix != 2) {
-		printf("%s - Quelle action voulez-vous effectuer ?\n", perso->nom);
-		printf("1 = Attaquer\n2 = CapacitC) spC)ciale (%s%s)\n",
-		       perso->techniques[0].nom,
-		       perso->techniques[0].cooldown_actuel > 0 ? " - en rechargement" : "");
-		scanf("%d", &choix);
-		if (choix != 1 && choix != 2) {
-			printf("Mauvais choix, recommencez.\n");
-		}
-	}
-
-	if (choix == 1) {
-	    int choix = -1, validation = 0;
-	while (choix < 1 || choix > TAILLE_EQUIPE || validation != 1) {
-		printf("Entrez la position du personnage C  attaquer : ");
-		scanf("%d", &choix);
-		validation = cible_valide(&equipe[choix - 1]);
-	}
-
-		attaque(perso, equipe+choix);
-	} else {
-		attaque_speciale(perso, equipe);
-	}
-	if(perso->brulure>0) {
-		perso->pv-=10;
-		perso->brulure-=1;
-		if(perso->pv<=0){
-		    printf("%s succombe a sa brulure",perso->nom);
-		    perso->est_KO=1;
-		}
-	}
+        sleep(10);
+         
+        afficher_plateau(equipe1, equipe2);
+    }
 }
 
 void attaque(Combattant* perso, Combattant* cible) {
+   
 
-	
-	printf("%s attaque %s\n", perso->nom, cible->nom);
 
-	int degats = perso->attaque - cible->defense;
-	if(perso->buff_attaque>0) {
-		degats*=1.5;
-	}
-	if(cible->buff_defense>0) {
-		degats=degats/1.5;
-	}
-	if (degats < 0) degats = 0;
+    printf("%s attaque %s\n", perso->nom, cible->nom);
 
-	int miss=rand()%100;
-	if(cible->debuff_agilite>0){
-	    miss*=1.5;
-	}
-	if(miss<cible->agilite) {
-		printf("%s esquive habilement l attaque de %s\n ",cible->nom,perso->nom);
-	}
-	else {
+    int degats = perso->attaque - cible->defense;
+    if (degats < 0) degats = 0;
+    int rate=rand()%100;
+    if(cible->debuff_agilite>0){
+        rate*=1.5;
+    }
+    if(rate<cible->agilite){
+        printf("%s esquive l attaque\n",cible->nom);
+    }
+else{
+    int crit = rand() % 100;
+    if (crit < perso->agilite) {
+        printf("Coup critique ! %s touche un point vital !\n", perso->nom);
+        degats = (int)(degats * 1.5);
+    }
 
-		int crit = rand() % 100;
-		if (crit < perso->agilite) {
-			printf("Coup critique ! %s touche un point vital !\n", perso->nom);
-			degats = (int)(degats * 1.5);
-		}
-		printf("%s recoit %d degats\n", cible->nom, degats);
-		cible->pv -= degats;
-		if (cible->pv <= 0) {
-			cible->pv = 0;
-			cible->est_KO = 1;
-			printf("%s succombe...\n", cible->nom);
-		}
-	}
+    printf("%s reçoit %d dégâts.\n", cible->nom, degats);
+    cible->pv -= degats;
+    if (cible->pv <= 0) {
+        cible->pv = 0;
+        cible->est_KO = 1;
+        printf("%s succombe...\n", cible->nom);
+    }
+    }
 }
 
 void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
