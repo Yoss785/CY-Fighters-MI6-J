@@ -123,6 +123,13 @@ void tour(Combattant* perso, Combattant* equipe) {
             printf("Mauvais choix, recommencez.\n");
         }
     }
+    TechniqueSpeciale* tech=perso->techniques;
+    if (tech->cooldown_actuel > 0) {
+        printf("La technique %s est encore en rechargement (%d tours restants).\n",
+               tech->nom, tech->cooldown_actuel);
+               printf("passage en mode attaque normale\n");
+        choix=1;
+    }
 
     if (choix == 1) {
          int choix = -1, validation = 0;
@@ -175,7 +182,6 @@ void tour(Combattant* perso, Combattant* equipe) {
         afficher_plateau(equipe1, equipe2);
     }
 }
-
 void attaque(Combattant* perso, Combattant* cible) {
    
 
