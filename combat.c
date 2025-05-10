@@ -174,54 +174,6 @@ else{
     }
     }
 }
-
-void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
-    TechniqueSpeciale* tech = &utilisateur->techniques[0];
-
-    if (tech->cooldown_actuel > 0) {
-        printf("La technique %s est encore en rechargement (%d tours restants).\n",
-               tech->nom, tech->cooldown_actuel);
-        return;
-    }
-
-    printf("Choisissez un ennemi pour utiliser la technique spéciale %s :\n", tech->nom);
-    for (int i = 0; i < TAILLE_EQUIPE; i++) {
-        if (!equipe_adverse[i].est_KO) {
-            printf("%d. %s (PV: %d)\n", i + 1, equipe_adverse[i].nom, equipe_adverse[i].pv);
-        }
-    }
-
-    int choix = -1, validation = 0;
-    while (choix < 1 || choix > TAILLE_EQUIPE || validation != 1) {
-        choix = getInt(1,TAILLE_EQUIPE);
-        validation = cible_valide(&equipe_adverse[choix - 1]);
-    }
-
-    appliquer_technique(utilisateur, &equipe_adverse[choix - 1], tech);
-}
-
-void appliquer_technique(Combattant* utilisateur, Combattant* cible, TechniqueSpeciale* technique) {
-    printf("%s utilise %s sur %s !\n", utilisateur->nom, technique->nom, cible->nom);
-    printf("Effet : %s\n", technique->description);
-
-    if (strcmp(technique->propriete_affectee, "pv") == 0) {
-        if (strcmp(technique->operation, "-") == 0) {
-            cible->pv -= technique->degat;
-            if (cible->pv < 0) cible->pv = 0;
-        } else if (strcmp(technique->operation, "+") == 0) {
-            cible->pv += technique->degat;
-            if (cible->pv > cible->pv_max) cible->pv = cible->pv_max;
-        }
-    }
-
-    if (cible->pv <= 0) {
-        cible->est_KO = 1;
-        printf("%s succombe sous l'effet de la technique...\n", cible->nom);
-    }
-
-    technique->cooldown_actuel = technique->tours_rechargement;
-}
-
 int cible_valide(Combattant* perso) {
     if (perso->est_KO == 1) {
         printf("Cet ennemi est déjà KO.\n");
