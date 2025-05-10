@@ -27,23 +27,6 @@ void afficher_indicateur_tour(int action, int max_action) {
     printf("]");
 }
 
-void afficher_effets_speciaux(Combattant *combattant) {
-    if (combattant->est_KO) {
-        printf("(KO)");
-    } else {
-        printf("    ");
-    }
-}
-
-// Fonction pour déterminer une cible par défaut (premier ennemi vivant)
-Combattant* trouver_cible_par_defaut(Combattant equipe[], int taille) {
-    for (int i = 0; i < taille; i++) {
-        if (!equipe[i].est_KO) {
-            return &equipe[i];
-        }
-    }
-    return NULL;
-}
 
 void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taille, int numero_equipe, int est_active) {
     int hauteur = h;
@@ -55,6 +38,9 @@ void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taill
     for (int i = 0; i < taille; i++) {
         if (equipe[i].est_KO) continue;
 
+        char ligne[L];
+        int decalage = 0;
+
         char nom_formate[64];
         if (equipe[i].est_actif) {
             snprintf(nom_formate, sizeof(nom_formate), "> %-15s <", equipe[i].nom);
@@ -62,42 +48,100 @@ void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taill
             snprintf(nom_formate, sizeof(nom_formate), "  %-15s  ", equipe[i].nom);
         }
 
-        printf("| %s |%2d| ", nom_formate, equipe[i].position);
+        decalage += snprintf(ligne + decalage, sizeof(ligne) - decalage, "| %s |%2d| ", nom_formate, equipe[i].position);
+        decalage += snprintf(ligne + decalage, sizeof(ligne) - decalage, "%3d/%3d ", equipe[i].pv, equipe[i].pv_max);
 
-        printf("%3d/%3d ", equipe[i].pv, equipe[i].pv_max);
-        afficher_indicateur_tour(equipe[i].action, 100); // 100 arbitraire
-        printf(" |\n");
+        int barre_pleine = (equipe[i].action * MAX_BARRE) / 100;
+        ligne[decalage++] = '[';
+        for (int j = 0; j < MAX_BARRE; j++) {
+            if (j < barre_pleine) {
+                ligne[decalage++] = '>';
+            } else {
+                ligne[decalage++] = ' ';
+            }
+        }
+        ligne[decalage++] = ']';
+
+        // Compléter avec des espaces jusqu'à l'avant-dernière colonne
+        while (decalage < L - 2) {
+            ligne[decalage++] = ' ';
+        }
+        ligne[decalage++] = '|';
+        ligne[decalage] = '\0';
+
+        printf("%s\n", ligne);
     }
 
     for (int i = 0; i < hauteur - 2 - taille; i++) {
         printf("|");
-        for (int j = 0; j < L - 2; j++) printf(" ");
+        for (int j = 0; j < L - 3; j++) printf(" ");
         printf("|\n");
     }
 
     printf("|");
-    for (int i = 0; i < L - 2; i++) printf("_");
+    for (int i = 0; i < L - 3; i++) printf("_");
     printf("|\n");
 }
 
+
 void afficher_techniques_speciales(Combattant *combattant, int numero_equipe) {
-    printf("| > %s (Equipe %d) <\n", combattant->nom, numero_equipe);
-    printf("| TECHNIQUE SPECIALE\n");
+    int hauteur = h;
+    char ligne[L];
+    int l;
+
+    // Titre avec nom du personnage
+    snprintf(ligne, sizeof(ligne), "| > %s (Equipe %d) <", combattant->nom, numero_equipe);
+    l = strlen(ligne);
+    while (l < L - 3) ligne[l++] = ' ';
+    ligne[l++] = '|';
+    ligne[l] = '\0';
+    printf("%s\n", ligne);
+
+    // Titre "TECHNIQUE SPECIALE"
+    snprintf(ligne, sizeof(ligne), "| TECHNIQUE SPECIALE");
+    l = strlen(ligne);
+    while (l < L - 3) ligne[l++] = ' ';
+    ligne[l++] = '|';
+    ligne[l] = '\0';
+    printf("%s\n", ligne);
 
     for (int i = 0; i < combattant->nb_techniques; i++) {
         TechniqueSpeciale *technique = &combattant->techniques[i];
-        printf("| [%d] %s \n", i + 1, technique->nom);
-        printf("|     ↳ %s\n", technique->description);
+
+        // Nom de la technique
+        snprintf(ligne, sizeof(ligne), "| [%d] %s", i + 1, technique->nom);
+        l = strlen(ligne);
+        while (l < L - 3) ligne[l++] = ' ';
+        ligne[l++] = '|';
+        ligne[l] = '\0';
+        printf("%s\n", ligne);
+
+        // Description
+        snprintf(ligne, sizeof(ligne), "|     -> %.75s", technique->description);
+        l = strlen(ligne);
+        while (l < L - 3) ligne[l++] = ' ';
+        ligne[l++] = '|';
+        ligne[l] = '\0';
+        printf("%s\n", ligne);
+
+        // Cooldown si actif
         if (technique->cooldown_actuel > 0) {
-            printf("|     ↳ Recharge: %d/%d tours\n",
-                   technique->cooldown_actuel, technique->tours_rechargement);
+            snprintf(ligne, sizeof(ligne), "|     -> Recharge: %d/%d tours",
+                     technique->cooldown_actuel, technique->tours_rechargement);
+            l = strlen(ligne);
+            while (l < L - 3) ligne[l++] = ' ';
+            ligne[l++] = '|';
+            ligne[l] = '\0';
+            printf("%s\n", ligne);
         }
     }
 
+    // Bordure inférieure
     printf("|");
-    for (int i = 0; i < L - 2; i++) printf("_");
+    for (int i = 0; i < L - 4; i++) printf("_");
     printf("|\n");
 }
+
 
 int determiner_equipe_active(Combattant equipe1[], Combattant equipe2[]) {
     int max_action1 = 0, max_action2 = 0;
