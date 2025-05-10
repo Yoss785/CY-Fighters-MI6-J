@@ -134,7 +134,7 @@ void kamehameha(Combattant* utilisateur, Combattant* cible) {
 	if (degats < 0) degats = 0;
 	printf("%s inflige %d degats a %s \n",utilisateur->nom,degats,cible->nom);
     cible->pv-=degats;
-	utilisateur->buff_attaque+=3;
+	utilisateur->buff_attaque=3;
 	if(cible->pv<=0) {
 		printf("%s a éliminé %s, la menace de la Terre\n",utilisateur->nom,cible->nom);
 		cible->est_KO=1;
@@ -157,7 +157,7 @@ void final_flash(Combattant* utilisateur, Combattant* cible) {
 	if (degats < 0) degats = 0;
 	printf("%s inflige %d degats a %s \n",utilisateur->nom,degats,cible->nom);
     cible->pv-=degats;
-	utilisateur->buff_defense+=3;
+	utilisateur->buff_defense=3;
 	if(cible->pv<=0) {
 		printf("%s a éliminé %s et sauve sa Bulma\n",utilisateur->nom,cible->nom);
 		cible->est_KO=1;
