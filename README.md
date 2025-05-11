@@ -3,9 +3,8 @@ https://onlinegdb.com/CVUq_vssP
 
 
 https://onlinegdb.com/0ncrRsNdt
+//Supprimer ce qu'il y'a en haut
 <script src="//onlinegdb.com/embed/
-
-  //Supprimer ce qu'il y'a en haut
 
   Au lancement du jeu, le joueur peut choisir d'affronter un autre joueur ou un adversaire contrôlé par l'ordinateur. Lors de la phase de sélection des personnages, on saisit un chiffre entre 1 et 8, correspondant au numéro du personnage souhaité. Un aperçu détaillé du personnage sélectionné est ensuite affiché, et l'on peut confirmer ou annuler ce choix.
 
