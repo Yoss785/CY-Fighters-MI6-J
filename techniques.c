@@ -22,13 +22,13 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
     }
     int cible;
     if(strcmp(tech->nom,"Crazy Diamond")==0||strcmp(tech->nom,"Senzu")==0){
-        cible=2;
+        cible=2; // attaque speciale visant un allie
     }
     else if((strcmp(tech->nom,"Blaster meteor")==0)){
-        cible=3;
+        cible=3; // attaque speciale visant tous le monde
     }
     else{
-        cible=1;
+        cible=1; // attaque speciale visant un ennemi
     }
 
     if (cible == 1) {
@@ -45,7 +45,7 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
             validation = cible_valide(&equipe_adverse[choix - 1]);
         }
 
-        appliquer_technique(utilisateur, &equipe_adverse[choix - 1], tech);
+        appliquer_technique(utilisateur, &equipe_adverse[choix - 1], tech); //on appelle la fonction correspondante
     }
 
     else if (cible == 2) {
@@ -63,10 +63,10 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
             validation = cible_valide(&equipe_allie[choix - 1]);
         }
 
-        appliquer_technique_allie(utilisateur, &equipe_allie[choix - 1], tech);
+        appliquer_technique_allie(utilisateur, &equipe_allie[choix - 1], tech); //on appelle la fonction correspondante
     }
     else if(cible==3){
-         appliquer_technique(utilisateur, &equipe_adverse[1], tech);
+         appliquer_technique(utilisateur, &equipe_adverse[1], tech); //on appelle la fonction sans demander une cible
     }
 }
 
@@ -78,7 +78,7 @@ void appliquer_technique(Combattant* utilisateur, Combattant* cible, TechniqueSp
         fprintf(stderr, "Erreur: pointeur null dans appliquer_technique.\n");
         return;
     }
-    
+    // on regarde le nom de la technique et on appelle la fonction correspondante
 	if(strcmp(technique->nom,"Mur de glace")==0) {
 		mur_de_glace(utilisateur,cible);
 	}
@@ -106,7 +106,7 @@ void appliquer_technique_allie(Combattant* utilisateur,Combattant* cible,Techniq
         fprintf(stderr, "Erreur: pointeur null dans appliquer_technique_allie.\n");
         return;
     }
-    
+    // on regarde le nom de la technique et on appelle la fonction correspondante
     if(strcmp(technique->nom,"Crazy Diamond")==0) {
 		crazy_diamond(utilisateur,cible);
     }
@@ -139,7 +139,7 @@ void blaster_meteor(Combattant* utilisateur, Combattant* cible) {
     printf("BLASTER METEOR !\n");
 
     Combattant* equipe_adverse = cible->equipe;
-
+	// on regarde si les membres de l equipe sont vivants et si oui on les attaque
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         if (!equipe_adverse[i].est_KO) {
             printf("%s subit une pluie de KI !\n", equipe_adverse[i].nom);
@@ -158,6 +158,7 @@ void kamehameha(Combattant* utilisateur, Combattant* cible) {
         fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
         return;
     }
+	//fait des degats et augmente les tours de buff
 	printf("Chargement du KI\n");
 	printf("KAMEHAME..........HAAAAAAAAAAA\n");
 	int degats=utilisateur->attaque-cible->defense;
@@ -185,6 +186,7 @@ void final_flash(Combattant* utilisateur, Combattant* cible) {
         fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
         return;
     }
+	//fait des degats et augmente les tours de buff
 	printf("Chargement du KI\n");
 	printf("FINAL FLASH\n");
 	int degats=utilisateur->attaque-cible->defense;
@@ -210,6 +212,7 @@ void crazy_diamond(Combattant* utilisateur, Combattant* cible){
         fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
         return;
     }
+	// selectionne un allie et rend tous les pv
     printf("%s pose sa main sur %s\n",utilisateur->nom,cible->nom);
     cible->pv=cible->pv_max;
     printf("%s se sent de nouveau en pleine forme\n",cible->nom);
@@ -245,6 +248,7 @@ void illumination_divine(Combattant* utilisateur, Combattant* cible){
         fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
         return;
     }
+	//fait des degats et augmente les tours de debuff
     printf("%s place son index et son majeur devant les yeux de %s \n",utilisateur->nom,cible->nom);
     printf("AMATERASU: ILLUMINATION DIVINE\n");
     int degats=utilisateur->attaque-cible->defense;
@@ -270,6 +274,7 @@ void senzu(Combattant* utilisateur, Combattant* cible){
         fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
         return;
     }
+	// rend un nombre fixe de pv et enleve la brulure
     printf("%s lance un haricot a %s\n",utilisateur->nom,cible->nom);
     cible->pv+=40;
     if(cible->pv>cible->pv_max){
