@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "check.h"
-
+//Fonction de sécurisation 
 int getInt(int min, int max) {
     if (min > max) {
         fprintf(stderr, "Erreur : getInt() appelé avec min > max (%d > %d)\n", min, max);
