@@ -2,35 +2,41 @@
 #include <stdlib.h>
 #include "check.h"
 
-void flush(void) {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
 int getInt(int min, int max) {
+    if (min > max) {
+        fprintf(stderr, "Erreur : getInt() appelé avec min > max (%d > %d)\n", min, max);
+        return 0;
+    }
+    char buffer[100];
     int val = 0;
-    char c;
     int valide = 0;
 
     while (!valide) {
-        c = getchar();  // Lire un caractère
-        if (c == '\n') continue;  // Ignorer les retours à la ligne
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+            printf("Erreur de lecture. Réessayez.\n");
+            continue;
+        }
 
-        // Vérifier si c'est un chiffre
-        if (c >= '0' && c <= '9') {
-            val = val * 10 + (c - '0');  // Construire l'entier
-        } else if (c == '\n') {
-            // Vérification si la valeur est dans l'intervalle valide
-            if (val >= min && val <= max) {
-                valide = 1;  // Saisie valide
-            } else {
-                printf("Veuillez entrer un nombre entre %d et %d.\n", min, max);
-                val = 0;  // Réinitialiser la valeur si elle est invalide
-                printf("Essayer encore : ");
-            }
+        val = 0;
+        int i = 0;
+        while (buffer[i] >= '0' && buffer[i] <= '9') {
+            val = val * 10 + (buffer[i] - '0');
+            i++;
+        }
+
+        // Si i == 0 => aucun chiffre lu, donc saisie invalide
+        // Si buffer[i] n’est pas '\n' ou '\0' => il y a des caractères invalides
+        if (i == 0 || (buffer[i] != '\n' && buffer[i] != '\0')) {
+            printf("Entrée invalide. Veuillez entrer un nombre entre %d et %d.\n", min, max);
+            continue;
+        }
+
+        if (val >= min && val <= max) {
+            valide = 1;
         } else {
-            printf("Entrée invalide. Essayez de nouveau.\n");
-            val = 0;  // Réinitialiser si l'entrée n'est pas un chiffre
+            printf("Veuillez entrer un nombre entre %d et %d.\n", min, max);
         }
     }
+
     return val;
 }
