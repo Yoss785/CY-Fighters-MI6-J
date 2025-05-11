@@ -14,13 +14,14 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
         fprintf(stderr, "Erreur: technique spéciale invalide.\n");
         return;
     }
-    
+    //verifier si il est bienn possible de faire l attaque
     if (tech->cooldown_actuel > 0) {
         printf("La technique %s est encore en rechargement (%d tours restants).\n",
                tech->nom, tech->cooldown_actuel);
         return;
     }
     int cible;
+	// en fonction du nom attribuer un type de cible
     if(strcmp(tech->nom,"Crazy Diamond")==0||strcmp(tech->nom,"Senzu")==0){
         cible=2; // attaque speciale visant un allie
     }
@@ -32,6 +33,7 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
     }
 
     if (cible == 1) {
+	    //choisir la cible
         printf("Choisissez un ennemi pour utiliser la technique spéciale %s :\n", tech->nom);
         for (int i = 0; i < TAILLE_EQUIPE; i++) {
             if (!equipe_adverse[i].est_KO) {
@@ -50,6 +52,7 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
 
     else if (cible == 2) {
         Combattant* equipe_allie = utilisateur->equipe;
+	    //choisir la cible
         printf("Choisissez un allié pour utiliser la technique spéciale %s :\n", tech->nom);
         for (int i = 0; i < TAILLE_EQUIPE; i++) {
             if (!equipe_allie[i].est_KO) {
@@ -94,9 +97,10 @@ void appliquer_technique(Combattant* utilisateur, Combattant* cible, TechniqueSp
 	else if(strcmp(technique->nom,"Illumination divine")==0) {
 		illumination_divine(utilisateur,cible);
 	}
-    else if(strcmp(technique->nom,"Grande eruption")==0) {
+    	else if(strcmp(technique->nom,"Grande eruption")==0) {
 		grande_eruption(utilisateur,cible);
 	}
+	// on applique le temps de recharge
 	technique->cooldown_actuel = technique->tours_rechargement;
 
 }
@@ -121,7 +125,7 @@ void mur_de_glace(Combattant* utilisateur, Combattant* cible) {
         return;
     }
 	printf("ICE AGE\n");
-	cible->pv-=utilisateur->attaque;
+	cible->pv-=utilisateur->attaque; // les degats ignorent la defense
 	printf("Aokiji inflige %d degats a %s\n",utilisateur->attaque,cible->nom);
 	if(cible->pv<=0) {
 		printf("%s transforme %s en statue\n",utilisateur->nom,cible->nom);
@@ -240,7 +244,7 @@ void grande_eruption(Combattant* utilisateur, Combattant* cible){
 		cible->est_KO=1;
 	}
 	else{
-	    cible->brulure+=3;
+	    cible->brulure+=3; //ajoute des tours de brulures
 	}
 }
 void illumination_divine(Combattant* utilisateur, Combattant* cible){
