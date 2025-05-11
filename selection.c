@@ -20,6 +20,10 @@ void afficher_stats(Combattant perso) {
 }
 
 void afficher_equipe_selection(Combattant* equipe) {
+    if (equipe == NULL) {
+        fprintf(stderr, "Erreur : pointeur NULL dans afficher_equipe_selection().\n");
+        return;
+    }
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         printf("\n--- Combattant %d ---\n", i + 1);
         afficher_stats(equipe[i]);
@@ -27,12 +31,26 @@ void afficher_equipe_selection(Combattant* equipe) {
 }
 
 void apercu(FILE* fichier, int choix) {
+    if (fichier == NULL) {
+        fprintf(stderr, "Erreur : fichier invalide dans apercu().\n");
+        return;
+    }
+
+    if (choix < 1 || choix > NBPERSO) {
+        fprintf(stderr, "Erreur : choix invalide (%d) dans apercu().\n", choix);
+        return;
+    }
+
     char buffer[200];
     char nom[MAX_NOM];
     int numero = 1;
     int stat;
     
-     rewind(fichier);
+    if (fichier == NULL) {
+        fprintf(stderr, "Erreur : fichier invalide dans apercu().\n");
+        return;
+    }
+    rewind(fichier);
 
     while (numero < choix && fgets(buffer, sizeof(buffer), fichier)) {
         if (strcmp(buffer, "-\n") == 0) {
@@ -73,6 +91,11 @@ void apercu(FILE* fichier, int choix) {
 }
 
 void construction_perso(Combattant* perso, FILE* fichier) {
+    if (perso == NULL || fichier == NULL) {
+        fprintf(stderr, "Erreur : pointeur NULL dans construction_perso().\n");
+        return;
+    }
+    
     int choix = -1;
     int validation = -1;
 
@@ -138,6 +161,11 @@ void construction_perso(Combattant* perso, FILE* fichier) {
 }
 //vérifier les retours de fscanf (et aussi les fonctions) 
 void selection(Combattant* equipe1, Combattant* equipe2, FILE* fichier) {
+    if (!equipe1 || !equipe2 || !fichier) {
+        fprintf(stderr, "Erreur : pointeur NULL dans selection().\n");
+        return;
+    }
+    
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         rewind(fichier);
         printf("\nJoueur 1 - Sélection du combattant %d\n", i + 1);
