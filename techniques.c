@@ -4,8 +4,17 @@
 #include "check.h"
 
 void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
+    if (!utilisateur || !equipe_adverse) {
+        fprintf(stderr, "Erreur: pointeur null dans attaque_speciale.\n");
+        return;
+    }
     TechniqueSpeciale* tech = &utilisateur->techniques[0];
-
+    
+    if (!tech) {
+        fprintf(stderr, "Erreur: technique spéciale invalide.\n");
+        return;
+    }
+    
     if (tech->cooldown_actuel > 0) {
         printf("La technique %s est encore en rechargement (%d tours restants).\n",
                tech->nom, tech->cooldown_actuel);
@@ -64,7 +73,12 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
 
 
 void appliquer_technique(Combattant* utilisateur, Combattant* cible, TechniqueSpeciale* technique) {
-
+    
+    if (!utilisateur || !cible || !technique) {
+        fprintf(stderr, "Erreur: pointeur null dans appliquer_technique.\n");
+        return;
+    }
+    
 	if(strcmp(technique->nom,"Mur de glace")==0) {
 		mur_de_glace(utilisateur,cible);
 	}
@@ -83,16 +97,16 @@ void appliquer_technique(Combattant* utilisateur, Combattant* cible, TechniqueSp
     else if(strcmp(technique->nom,"Grande eruption")==0) {
 		grande_eruption(utilisateur,cible);
 	}
-
-
-//	printf("%s utilise %s sur %s !\n", utilisateur->nom, technique->nom, cible->nom);
-//	printf("Effet : %s\n", technique->description);
-
 	technique->cooldown_actuel = technique->tours_rechargement;
 
 }
 
 void appliquer_technique_allie(Combattant* utilisateur,Combattant* cible,TechniqueSpeciale* technique){
+    if (!utilisateur || !cible || !technique) {
+        fprintf(stderr, "Erreur: pointeur null dans appliquer_technique_allie.\n");
+        return;
+    }
+    
     if(strcmp(technique->nom,"Crazy Diamond")==0) {
 		crazy_diamond(utilisateur,cible);
     }
@@ -102,6 +116,10 @@ void appliquer_technique_allie(Combattant* utilisateur,Combattant* cible,Techniq
 }
 
 void mur_de_glace(Combattant* utilisateur, Combattant* cible) {
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
 	printf("ICE AGE\n");
 	cible->pv-=utilisateur->attaque;
 	printf("Aokiji inflige %d degats a %s\n",utilisateur->attaque,cible->nom);
@@ -113,6 +131,10 @@ void mur_de_glace(Combattant* utilisateur, Combattant* cible) {
 }
 
 void blaster_meteor(Combattant* utilisateur, Combattant* cible) {
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
     printf("Chargement du KI...\n");
     printf("BLASTER METEOR !\n");
 
@@ -129,7 +151,13 @@ void blaster_meteor(Combattant* utilisateur, Combattant* cible) {
         }
     }
 }
+
+
 void kamehameha(Combattant* utilisateur, Combattant* cible) {
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
 	printf("Chargement du KI\n");
 	printf("KAMEHAME..........HAAAAAAAAAAA\n");
 	int degats=utilisateur->attaque-cible->defense;
@@ -153,6 +181,10 @@ void kamehameha(Combattant* utilisateur, Combattant* cible) {
 }
 
 void final_flash(Combattant* utilisateur, Combattant* cible) {
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
 	printf("Chargement du KI\n");
 	printf("FINAL FLASH\n");
 	int degats=utilisateur->attaque-cible->defense;
@@ -174,11 +206,19 @@ void final_flash(Combattant* utilisateur, Combattant* cible) {
 	cible->action=0;
 }
 void crazy_diamond(Combattant* utilisateur, Combattant* cible){
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
     printf("%s pose sa main sur %s\n",utilisateur->nom,cible->nom);
     cible->pv=cible->pv_max;
     printf("%s se sent de nouveau en pleine forme\n",cible->nom);
 }
 void grande_eruption(Combattant* utilisateur, Combattant* cible){
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
     printf("Akainu charge son magma\n");
     printf("GRANDE ERRUPTION\n");
     int degats=utilisateur->attaque-cible->defense;
@@ -201,6 +241,10 @@ void grande_eruption(Combattant* utilisateur, Combattant* cible){
 	}
 }
 void illumination_divine(Combattant* utilisateur, Combattant* cible){
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
     printf("%s place son index et son majeur devant les yeux de %s \n",utilisateur->nom,cible->nom);
     printf("AMATERASU: ILLUMINATION DIVINE\n");
     int degats=utilisateur->attaque-cible->defense;
@@ -222,6 +266,10 @@ void illumination_divine(Combattant* utilisateur, Combattant* cible){
 	cible->debuff_agilite+=3;
 }
 void senzu(Combattant* utilisateur, Combattant* cible){
+    if (!utilisateur || !cible) {
+        fprintf(stderr, "Erreur: pointeur null dans une des techniques\n");
+        return;
+    }
     printf("%s lance un haricot a %s\n",utilisateur->nom,cible->nom);
     cible->pv+=40;
     if(cible->pv>cible->pv_max){
