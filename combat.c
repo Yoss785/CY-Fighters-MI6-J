@@ -8,7 +8,7 @@
 #include "check.h"
 #include "techniques.h"
 #include <unistd.h>
-
+//phase du combat
 void phase(Combattant* equipe1, Combattant* equipe2) {
     if (!equipe1 || !equipe2) {
         fprintf(stderr, "Erreur: une des équipes est NULL dans phase().\n");
@@ -88,7 +88,7 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
         }
     }
 }
-
+//Tour du combat
 void tour(Combattant* perso, Combattant* equipe) {
     
     if (!perso || !equipe) {
@@ -104,7 +104,7 @@ void tour(Combattant* perso, Combattant* equipe) {
     if (perso->est_KO == 1) return;
     
     int choix = -1;
-    
+    //choix d'attaque
     while (choix != 1 && choix != 2) {
         printf("%s - Quelle action voulez-vous effectuer ?\n", perso->nom);
         printf("1 = Attaquer\n2 = Capacité spéciale (%s%s)\n",
@@ -125,6 +125,7 @@ void tour(Combattant* perso, Combattant* equipe) {
 
     if (choix == 1) {
          int choix = -1, validation = 0;
+    //choix de cible du combattant
     while (choix < 1 || choix > TAILLE_EQUIPE || validation != 1) {
         printf("Entrez la position du personnage à attaquer : ");
         choix = getInt(1,TAILLE_EQUIPE);
@@ -146,11 +147,13 @@ void tour(Combattant* perso, Combattant* equipe) {
             equipe1 = equipe;
             equipe2 = perso->equipe;
         }
+        //réduction du cooldown 
         for (int i = 0; i < perso->nb_techniques; i++) {
             if (perso->techniques[i].cooldown_actuel > 0) {
             perso->techniques[i].cooldown_actuel--;
             }
         }
+        //Buff et débuff
          if(perso->brulure>0){
              printf("\n");
              printf("%s souffre de sa brulure\n",perso->nom);
@@ -176,12 +179,14 @@ void tour(Combattant* perso, Combattant* equipe) {
         perso->debuff_agilite-=1;
         printf("\n");
         printf("il reste %d tours de debuff d agilite a %s\n",perso->debuff_agilite,perso->nom);
-    }
+    }    
+        //Met en pause l'écran
         sleep(5);
          
         afficher_plateau(equipe1, equipe2);
     }
 }
+//Attaque basique du combattant
 void attaque(Combattant* perso, Combattant* cible) {
     if (!perso || !cible) {
     fprintf(stderr, "Erreur: paramètre NULL dans attaque().\n");
@@ -215,6 +220,7 @@ else{
     }
     }
 }
+//Vérifier si la cible n'est pas K.O.
 int cible_valide(Combattant* perso) {
     if (!perso) {
         fprintf(stderr, "Erreur: cible_valide appelée avec un pointeur NULL.\n");
@@ -227,7 +233,7 @@ int cible_valide(Combattant* perso) {
     }
     return 1;
 }
-
+//Vérifier si une équipe est morte
 int equipe_vivante(Combattant* equipe) {
     if (!equipe) {
         fprintf(stderr, "Erreur: equipe_vivante appelée avec un pointeur NULL.\n");
