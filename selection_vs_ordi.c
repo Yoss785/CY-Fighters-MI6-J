@@ -1,9 +1,15 @@
 #include <time.h>
 #include <stdlib.h>
-#include "selection.c"
+#include "selection.h"
+#include "selection_vs_ordi.h"
+#include "code.h"
 
 
 void selection_joueur_vs_ordi(Combattant* joueur, Combattant* ordinateur, FILE* fichier) {
+    if (!joueur || !ordinateur || !fichier) {
+        fprintf(stderr, "Erreur : pointeur NULL passé à selection_joueur_vs_ordi\n");
+        return;
+    }
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         int j;
 
@@ -53,6 +59,11 @@ void selection_joueur_vs_ordi(Combattant* joueur, Combattant* ordinateur, FILE* 
 
 
 void construction_perso_auto(Combattant* perso, FILE* fichier) {
+    if (!perso || !fichier) {
+        fprintf(stderr, "Erreur : pointeur NULL passé à construction_perso_auto\n");
+        return;
+    }
+    
     char buffer[200];
     int choix;
     int numero = 1;
