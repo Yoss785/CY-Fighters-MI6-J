@@ -16,7 +16,7 @@ AOKIJI
 12
 13
 Mur de glace
-Inflige des degats à l'adversaire et le gèle
+Inflige des degats en ignorant la def de l'adversaire et le gèle
 4 
 0
 -
@@ -70,7 +70,7 @@ KRILLIN
 20
 25
 Senzu
-Soigne un allie
+Soigne un allie et sa brulure
 2
 0
 -
