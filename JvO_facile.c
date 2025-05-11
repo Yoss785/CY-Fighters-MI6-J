@@ -10,6 +10,10 @@
 #include "JvO_facile.h"
 
 void phase_bot(Combattant* equipe1, Combattant* equipe2) {
+    if (!equipe1 || !equipe2) {
+    fprintf(stderr, "Erreur: une des équipes est NULL dans phase().\n");
+    return;
+    }
     // Remplir les barres d'action
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         if (!equipe1[i].est_KO) {
@@ -66,6 +70,10 @@ void phase_bot(Combattant* equipe1, Combattant* equipe2) {
 }
 
 void tour_bot(Combattant* bot, Combattant* equipe_adverse) {
+    if (!bot || !equipe_adverse) {
+        fprintf(stderr, "Erreur: paramètre NULL dans tour_bot().\n");
+        return;
+    }
     if (bot->est_KO) return;
 
     // === Buffs / débuffs progressifs ===
@@ -102,6 +110,15 @@ void tour_bot(Combattant* bot, Combattant* equipe_adverse) {
 }
 
 void tour_joueur(Combattant* perso, Combattant* equipe) {
+    if (!perso || !equipe) {
+        fprintf(stderr, "Erreur: paramètre NULL dans tour_joueur().\n");
+        return;
+    }
+    
+    if (perso->nb_techniques <= 0 || !perso->techniques) {
+        fprintf(stderr, "Erreur: aucune technique définie pour %s\n", perso->nom);
+        return;
+    }
     if (perso->est_KO == 1) return;
     int choix = -1;
     
