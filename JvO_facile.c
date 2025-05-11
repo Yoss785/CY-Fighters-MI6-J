@@ -46,6 +46,7 @@ void phase_bot(Combattant* equipe1, Combattant* equipe2) {
                 equipe1[i].action = 0;
                 equipe1[i].est_actif = 0;
                 action_done = 1;
+                if (!equipe_vivante(equipe2)) return;
                 break;
             }
         }
@@ -60,6 +61,7 @@ void phase_bot(Combattant* equipe1, Combattant* equipe2) {
                     equipe2[i].action = 0;
                     equipe2[i].est_actif = 0;
                     action_done = 1;
+                    if (!equipe_vivante(equipe1)) return;
                     break;
                 }
             }
@@ -95,7 +97,7 @@ void tour_bot(Combattant* bot, Combattant* equipe_adverse) {
 
     int index_cible = indices_valides[rand() % nb_cibles];
     attaque(bot, &equipe_adverse[index_cible]);
-    sleep(5);
+    if (!equipe_vivante(equipe_adverse)) return;
 
     // === Effets de brûlure ===
     if(bot->brulure > 0) {
@@ -139,6 +141,7 @@ void tour_joueur(Combattant* perso, Combattant* equipe) {
     } else {
         attaque_speciale(perso, equipe);
     }
+    if (!equipe_vivante(equipe)) return;
     if (perso->equipe == NULL) {
         printf("Erreur: impossible de déterminer l'équipe du personnage\n");
     } else {
