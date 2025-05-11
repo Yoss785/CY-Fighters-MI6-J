@@ -9,6 +9,7 @@
 #include "techniques.h"
 #include "JvO_facile.h"
 
+//phase du combat face à l'ordinateur
 void phase_bot(Combattant* equipe1, Combattant* equipe2) {
     if (!equipe1 || !equipe2) {
     fprintf(stderr, "Erreur: une des équipes est NULL dans phase().\n");
