@@ -5,6 +5,7 @@
 #include "combat.h"
 #include <stdlib.h>
 
+// Effacer l'écran après chaque tour
 void effacer_ecran() {
 #ifdef _WIN32
     system("cls");
@@ -12,7 +13,7 @@ void effacer_ecran() {
     system("clear");
 #endif
 }
-
+//afficher du plateau d'une équipe
 void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taille, int numero_equipe, int est_active) {
     if (equipe == NULL || equipe_adverse == NULL || taille <= 0) return;
 
@@ -27,17 +28,18 @@ void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taill
 
         char ligne[L];
         int decalage = 0;
-
+        //affichage du nom, avec "> nom <" s'il est actif
         char nom_formate[64];
         if (equipe[i].est_actif) {
             snprintf(nom_formate, sizeof(nom_formate), "> %-15s <", equipe[i].nom);
         } else {
             snprintf(nom_formate, sizeof(nom_formate), "  %-15s  ", equipe[i].nom);
         }
-
+        //affichage de la position et des points de vie
         decalage += snprintf(ligne + decalage, sizeof(ligne) - decalage, "| %s |%2d| ", nom_formate, equipe[i].position);
         decalage += snprintf(ligne + decalage, sizeof(ligne) - decalage, "%3d/%3d ", equipe[i].pv, equipe[i].pv_max);
-
+        
+        //affichage de la barre de tour
         int barre_pleine = (equipe[i].action * MAX_BARRE) / 100;
         ligne[decalage++] = '[';
         for (int j = 0; j < MAX_BARRE; j++) {
@@ -69,14 +71,14 @@ void afficher_equipe(Combattant equipe[], Combattant equipe_adverse[], int taill
     printf("|\n");
 }
 
-
+//affichage d'une bulle de la technique spéciale du combattant actif
 void afficher_techniques_speciales(Combattant *combattant, int numero_equipe) {
     if (combattant == NULL) return;
 
     int hauteur = h;
     char ligne[L];
     int l;
-
+    //affichage de son nom et de son numéro d'équipe
     snprintf(ligne, sizeof(ligne), "| > %s (Equipe %d) <", combattant->nom, numero_equipe);
     l = strlen(ligne);
     while (l < L - 3) ligne[l++] = ' ';
@@ -90,7 +92,7 @@ void afficher_techniques_speciales(Combattant *combattant, int numero_equipe) {
     ligne[l++] = '|';
     ligne[l] = '\0';
     printf("%s\n", ligne);
-
+    //affichage de la technique avec son nom, sa description et de son nombre de tour de rechargement si nécessaire
     for (int i = 0; i < combattant->nb_techniques; i++) {
         TechniqueSpeciale *technique = &combattant->techniques[i];
 
@@ -124,7 +126,7 @@ void afficher_techniques_speciales(Combattant *combattant, int numero_equipe) {
     printf("|\n");
 }
 
-
+//Determiner quelle équipe est active 
 int determiner_equipe_active(Combattant equipe1[], Combattant equipe2[]) {
     if (equipe1 == NULL || equipe2 == NULL) return 1;
 
@@ -137,7 +139,7 @@ int determiner_equipe_active(Combattant equipe1[], Combattant equipe2[]) {
     }
     return (max_action1 >= max_action2) ? 1 : 2;
 }
-
+//Trouver le personnage actif
 Combattant* trouver_personnage_actif(Combattant equipe[], int taille_equipe) {
     if (equipe == NULL || taille_equipe <= 0) return NULL;
 
@@ -151,7 +153,7 @@ Combattant* trouver_personnage_actif(Combattant equipe[], int taille_equipe) {
     }
     return actif;
 }
-
+//affichage du plateau entier 
 void afficher_plateau(Combattant equipe1[], Combattant equipe2[]) {
     if (equipe1 == NULL || equipe2 == NULL) return;
 
