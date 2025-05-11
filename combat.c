@@ -6,8 +6,15 @@
 #include "combat.h"
 #include "code.h"
 #include "check.h"
+#include "techniques.h"
+#include <unistd.h>
 
 void phase(Combattant* equipe1, Combattant* equipe2) {
+    if (!equipe1 || !equipe2) {
+    fprintf(stderr, "Erreur: une des équipes est NULL dans phase().\n");
+    return;
+    }
+
     // Remplir les barres d'action
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         if (!equipe1[i].est_KO) {
@@ -65,6 +72,17 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
 }
 
 void tour(Combattant* perso, Combattant* equipe) {
+    
+    if (!perso || !equipe) {
+        fprintf(stderr, "Erreur: paramètre NULL dans tour().\n");
+        return;
+    }
+    
+    if (perso->nb_techniques <= 0 || !perso->techniques) {
+        fprintf(stderr, "Erreur: aucune technique définie pour %s\n", perso->nom);
+        return;
+    }
+
     if (perso->est_KO == 1) return;
     
     int choix = -1;
@@ -138,14 +156,16 @@ void tour(Combattant* perso, Combattant* equipe) {
         printf("\n");
         printf("il reste %d tours de debuff d agilite a %s\n",perso->debuff_agilite,perso->nom);
     }
-        sleep(10);
+        sleep(5);
          
         afficher_plateau(equipe1, equipe2);
     }
 }
 void attaque(Combattant* perso, Combattant* cible) {
-   
-
+    if (!perso || !cible) {
+    fprintf(stderr, "Erreur: paramètre NULL dans attaque().\n");
+    return;
+    }
 
     printf("%s attaque %s\n", perso->nom, cible->nom);
 
@@ -175,6 +195,11 @@ else{
     }
 }
 int cible_valide(Combattant* perso) {
+    if (!perso) {
+        fprintf(stderr, "Erreur: cible_valide appelée avec un pointeur NULL.\n");
+        return 0;
+    }
+
     if (perso->est_KO == 1) {
         printf("Cet ennemi est déjà KO.\n");
         return 0;
@@ -183,6 +208,11 @@ int cible_valide(Combattant* perso) {
 }
 
 int equipe_vivante(Combattant* equipe) {
+    if (!equipe) {
+        fprintf(stderr, "Erreur: equipe_vivante appelée avec un pointeur NULL.\n");
+        return 0;
+    }
+
     int morts = 0;
     for (int i = 0; i < TAILLE_EQUIPE; i++) {
         if (equipe[i].est_KO == 1) {
