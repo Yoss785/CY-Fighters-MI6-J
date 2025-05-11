@@ -16,7 +16,7 @@ void attaque_speciale(Combattant* utilisateur, Combattant* equipe_adverse) {
     }
     
     if (tech->cooldown_actuel > 0) {
-        printf("La technique %s est encore en rechargement (%d tours restants).\n",
+        printf("La technique %s est encore en rechargement (%d tour(s) restants).\n",
                tech->nom, tech->cooldown_actuel);
         return;
     }
@@ -122,7 +122,7 @@ void mur_de_glace(Combattant* utilisateur, Combattant* cible) {
     }
 	printf("ICE AGE\n");
 	cible->pv-=utilisateur->attaque;
-	printf("Aokiji inflige %d degats a %s\n",utilisateur->attaque,cible->nom);
+	printf("Aokiji inflige %d degats a %s et le gele\n",utilisateur->attaque,cible->nom);
 	if(cible->pv<=0) {
 		printf("%s transforme %s en statue\n",utilisateur->nom,cible->nom);
 		cible->est_KO=1;
@@ -173,7 +173,7 @@ void kamehameha(Combattant* utilisateur, Combattant* cible) {
     cible->pv-=degats;
 	utilisateur->buff_attaque=3;
 	if(cible->pv<=0) {
-		printf("%s a éliminé %s, la menace de la Terre\n",utilisateur->nom,cible->nom);
+		printf("%s a éliminé %s, une menace de la Terre\n",utilisateur->nom,cible->nom);
 		cible->est_KO=1;
 	}
 	cible->action=0;
