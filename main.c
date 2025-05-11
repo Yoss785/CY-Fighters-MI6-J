@@ -20,7 +20,7 @@ int main() {
         printf("Erreur : fichier introuvable.\n");
         return 1;
     }
-
+    //choix du mode de jeu
     printf("Choisissez le mode de jeu :\n");
     printf("1 - Joueur vs Joueur\n");
     printf("2 - Joueur vs Ordinateur\n");
@@ -28,27 +28,29 @@ int main() {
 
     if (choix_mode == 1) {
         selection(equipe1, equipe2, fichier); // sélection manuelle des 2 équipes
-
+        //Definir la position des combattants et les équipes
         for (int i = 0; i < TAILLE_EQUIPE; i++) {
             equipe1[i].position = i + 1;
             equipe2[i].position = i + 1;
             equipe1[i].equipe = equipe1;
             equipe2[i].equipe = equipe2;
         }
-
+        //boucle pour vérifier si une équipe est morte et afficher le vainqueur
         while (equipe_vivante(equipe1) && equipe_vivante(equipe2)) {
             phase(equipe1, equipe2);
 
             if (!equipe_vivante(equipe1)) {
-                printf("L'équipe 2 a gagné !\n");
+                printf("L'équipe 2 remporte la partie !\n");
                 break;
             }
             if (!equipe_vivante(equipe2)) {
-                printf("L'équipe 1 a gagné !\n");
+                printf("L'équipe 1 remporte la partie !\n");
                 break;
             }
         }
-    }   else{
+    }   
+    //Combat face à l'ordinateur, difficulté noob
+    else{
         selection_joueur_vs_ordi(equipe1, equipe2, fichier); // équipe2 générée automatiquement
 
         for (int i = 0; i < TAILLE_EQUIPE; i++) {
@@ -62,11 +64,11 @@ int main() {
             phase_bot(equipe1, equipe2);  // ici, bot joue à la place de l'équipe 2
 
             if (!equipe_vivante(equipe1)) {
-                printf("L'ordinateur a gagné !\n");
+                printf("L'ordinateur remporte la partie !\n");
                 break;
             }
             if (!equipe_vivante(equipe2)) {
-                printf("Le joueur a gagné !\n");
+                printf("Le joueur remporte la partie !\n");
                 break;
             }
         }
