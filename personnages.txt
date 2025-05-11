@@ -4,7 +4,7 @@ AKAINU
 12 
 10 
 10 
-Grande eruption 
+Grande eruption
 Inflige des degats et brule l'adversaire pendant 3 tours 
 3
 0
@@ -16,7 +16,7 @@ AOKIJI
 12
 13
 Mur de glace
-Inflige des degats à l'adversaire et le gèle à son prochain tour
+Inflige des degats à l'adversaire et le gèle
 4 
 0
 -
@@ -27,7 +27,7 @@ KIZARU
 18
 17
 Illumination divine
-Inflige des degats à l'adversaire et l'aveugle(baisse son agilité) 
+Inflige des degats à l'adversaire et l'aveugle(baisse son agilité)
 2
 0
 -
