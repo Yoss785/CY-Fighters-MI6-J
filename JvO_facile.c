@@ -95,6 +95,7 @@ void tour_bot(Combattant* bot, Combattant* equipe_adverse) {
 
     int index_cible = indices_valides[rand() % nb_cibles];
     attaque(bot, &equipe_adverse[index_cible]);
+    sleep(5);
 
     // === Effets de brûlure ===
     if(bot->brulure > 0) {
