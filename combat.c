@@ -98,7 +98,7 @@ void tour(Combattant* perso, Combattant* equipe) {
         }
     }
     TechniqueSpeciale* tech=perso->techniques;
-    if (tech->cooldown_actuel > 0) {
+    if (tech->cooldown_actuel > 0 && choix==2) {
         printf("La technique %s est encore en rechargement (%d tours restants).\n",
                tech->nom, tech->cooldown_actuel);
                printf("passage en mode attaque normale\n");
