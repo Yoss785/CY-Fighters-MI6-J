@@ -1,7 +1,6 @@
 #ifndef SELECTION_JVO_H
 #define SELECTION_JVO_H
 
-#include <stdio.h>
 #include "code.h" 
 #include "selection.h"
 
