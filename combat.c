@@ -11,8 +11,8 @@
 
 void phase(Combattant* equipe1, Combattant* equipe2) {
     if (!equipe1 || !equipe2) {
-    fprintf(stderr, "Erreur: une des équipes est NULL dans phase().\n");
-    return;
+        fprintf(stderr, "Erreur: une des équipes est NULL dans phase().\n");
+        return;
     }
 
     // Remplir les barres d'action
@@ -23,6 +23,11 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
         if (!equipe2[i].est_KO) {
             equipe2[i].action += equipe2[i].vitesse;
         }
+    }
+
+    // Vérifier immédiatement si une équipe est KO
+    if (!equipe_vivante(equipe1) || !equipe_vivante(equipe2)) {
+        return;
     }
 
     // Boucle principale pour exécuter les tours
@@ -40,7 +45,7 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
             if (!equipe1[i].est_KO && equipe1[i].action >= 100) {
                 equipe1[i].est_actif = 1;
                 printf("\n(Appuyez sur Entrée pour continuer...)\n");
-                while (getchar() != '\n');// Vide le buffer jusqu'à un saut de ligne
+                while (getchar() != '\n'); // Vide le buffer
                 afficher_plateau(equipe1, equipe2);
                 tour(&equipe1[i], equipe2);
                 equipe1[i].action = 0;
@@ -50,13 +55,18 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
             }
         }
 
+        // Vérifier après action si une équipe est KO
+        if (!equipe_vivante(equipe1) || !equipe_vivante(equipe2)) {
+            return;
+        }
+
         // Tour équipe 2
         if (!action_done) {
             for (int i = 0; i < TAILLE_EQUIPE; i++) {
                 if (!equipe2[i].est_KO && equipe2[i].action >= 100) {
                     equipe2[i].est_actif = 1;
                     printf("\n(Appuyez sur Entrée pour continuer...)\n");
-                    while (getchar() != '\n');// Vide le buffer jusqu'à un saut de ligne
+                    while (getchar() != '\n');
                     afficher_plateau(equipe1, equipe2);
                     tour(&equipe2[i], equipe1);
                     equipe2[i].action = 0;
@@ -67,7 +77,15 @@ void phase(Combattant* equipe1, Combattant* equipe2) {
             }
         }
 
-        if (!action_done) break;
+        // Vérifier après action si une équipe est KO
+        if (!equipe_vivante(equipe1) || !equipe_vivante(equipe2)) {
+            return;
+        }
+
+        // Si aucune action possible, sortir de la boucle
+        if (!action_done) {
+            return;
+        }
     }
 }
 
@@ -98,7 +116,7 @@ void tour(Combattant* perso, Combattant* equipe) {
         }
     }
     TechniqueSpeciale* tech=perso->techniques;
-    if (tech->cooldown_actuel > 0 && choix==2) {
+    if (tech->cooldown_actuel > 0) {
         printf("La technique %s est encore en rechargement (%d tours restants).\n",
                tech->nom, tech->cooldown_actuel);
                printf("passage en mode attaque normale\n");
@@ -113,6 +131,9 @@ void tour(Combattant* perso, Combattant* equipe) {
         validation = cible_valide(&equipe[choix - 1]);
     }
         attaque(perso,&equipe[choix - 1]);
+        if (!equipe_vivante(equipe)) {
+            return; // on quitte tour()
+        }
     } else {
         attaque_speciale(perso, equipe);
     }
